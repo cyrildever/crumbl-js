@@ -77,11 +77,11 @@ try {
 
 The value for the fields of the `Worker` are the following:
 * `mode`: either `client.CREATION` to crumbl or `client.EXTRACTION` to uncrumbl;
-* `input`: path to the file to read an existing crumbl from (WARNING: do not add in the `data` field too);
+* `input`: path to the file to read an existing crumbl from (WARNING: do not add it in the `data` field in that case);
 * `output`: path to a file to save the result to;
-* `ownerKeys`: comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of owner(s);
-* `ownerSecret`: filepath to the private key of the owner
-* `signerKeys`: comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of trusted signer(s);
+* `ownerKeys`: a comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of owner(s);
+* `ownerSecret`: filepath to the private key of the owner;
+* `signerKeys`: a comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of trusted signer(s);
 * `signerSecret`: filepath to the private key of the trusted signer;
 * `verificationHash`: optional verification hash of the data;
 * `data`: an array of data to use.

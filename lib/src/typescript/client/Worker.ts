@@ -1,5 +1,5 @@
 import { Crumbl, VERSION } from '../core/Crumbl'
-import { existsAlgorithm, getKeyBuffer, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../crypto'
+import { existsAlgorithm, getKeyBuffer, hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../crypto'
 import { logger, ERROR, WARNING } from '../utils/logger'
 import { Signer } from '../models/Signer'
 import { Uncrumb, toUncrumb, PARTIAL_PREFIX } from '../Decrypter/Uncrumb'
@@ -108,6 +108,12 @@ export class CrumblWorker {
             const msg = 'no data to use'
             logger.log(msg, ERROR)
             throw new Error(msg)
+        }
+        if (this.mode == CREATION && this.verificationHash) {
+            const hashedSource = hash(this.data[0], DEFAULT_HASH_ENGINE)
+            if (hashedSource != this.verificationHash) {
+                logger.log('verification hash is not coherent with data source', WARNING) // TODO Change it as an error?
+            }
         }
 
         let result = ''

@@ -12,12 +12,12 @@ export const encrypt = async (data: Slice, index: number, s: Signer): Promise<Cr
         switch (s.encryptionAlgorithm) {
             case ecies.ECIES_ALGORITHM: {
                 // IMPORTANT: the signer's public key hexadecimal string has to be passed through the `ecies.getPublicKeyBuffer()` function beforehand
-                const ciphered = await ecies.encrypt(Buffer.from(data), s.publicKey!)
+                const ciphered = await ecies.encrypt(Buffer.from(data), s.publicKey)
                 crypted = ciphered.toString('base64')
                 break
             }
             case rsa.RSA_ALGORITHM:
-                crypted = rsa.encrypt(Buffer.from(data), s.publicKey!)
+                crypted = rsa.encrypt(Buffer.from(data), s.publicKey)
                 break
             default:
                 throw new Error('unknown encryption algorithm: ' + s.encryptionAlgorithm)

@@ -1,6 +1,9 @@
 import * as chai from 'chai'
 import 'mocha'
+import chaiAsPromised from 'chai-as-promised'
+chai.use(chaiAsPromised)
 chai.should()
+const expect = chai.expect
 
 import { encrypt, decrypt } from '../../../../../lib/src/typescript/crypto/rsa'
 
@@ -20,6 +23,23 @@ describe('crypto/rsa', () => {
             const privkey = fs.readFileSync('test/src/typescript/crypto/rsa/keys/trustee2.sk')
             const decrypted = decrypt(crypted, privkey)
             decrypted.toString().should.equal(expected)
+        })
+    })
+    describe('encrypt', () => {
+        it('should not accept too long input', () => {
+            const veryLongStr = 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrs'
+
+            // This example uses a 2048 bits long RSA key.
+            const pubkey = fs.readFileSync('test/src/typescript/crypto/rsa/keys/trustee2.pub')
+
+            // For RSA key of 2048 bits (256 bytes), using the SHA-512 hash of 64 bytes long with OAEP,
+            // the RSA padding will be 2 * 64 + 2 = 130 bytes.
+            // Hence, the max length of the data would be 256 - 130 = 126 bytes.
+            veryLongStr.length.should.be.above(256 - (2 * 64 + 2))
+
+            expect(function () {
+                encrypt(Buffer.from(veryLongStr), pubkey)
+            }).to.throw('RSAES-OAEP input message length is too long.')
         })
     })
     describe('decrypt', () => {

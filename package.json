@@ -1,0 +1,48 @@
+{
+  "name": "crumbl-js",
+  "version": "1.0.0",
+  "description": "Secure data storage with trusted third-parties to use in Javascript environment",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "eslint . --ext .ts --fix && tsc",
+    "example": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
+    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgewhere/crumbl-js.git"
+  },
+  "author": "Edgewhere",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edgewhere/crumbl-js/issues"
+  },
+  "homepage": "https://github.com/edgewhere/crumbl-js#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.21",
+    "@types/typescript": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-react": "^7.17.0",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "@rooot/ecies": "github:Methrat0n/ecies-parity#52816593d609dbc21844e585ce16631332f1b57c",
+    "@types/node-forge": "^0.9.0",
+    "@types/seedrandom": "^2.4.28",
+    "eciesjs": "^0.3.3",
+    "is-base64": "^1.0.0",
+    "js-sha256": "^0.9.0",
+    "node-forge": "^0.9.1",
+    "seedrandom": "^3.0.5"
+  }
+}

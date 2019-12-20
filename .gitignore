@@ -66,5 +66,3 @@ build
 dist
 .vscode
 package-lock.json
-
-index.js

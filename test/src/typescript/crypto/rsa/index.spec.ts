@@ -5,9 +5,9 @@ chai.use(chaiAsPromised)
 chai.should()
 const expect = chai.expect
 
-import { encrypt, decrypt } from '../../../../../lib/src/typescript/crypto/rsa'
-
 import fs from 'fs'
+
+import { encrypt, decrypt } from '../../../../../lib/src/typescript/crypto/rsa'
 
 describe('crypto/rsa', () => {
     // Equivalent to 'crumbl-exe/crypto/rsa/rsa_test.go' tests

@@ -1,7 +1,7 @@
+import seedrandom from 'seedrandom'
+
 import { leftPad, unpad } from '../utils/padding'
 import { seedFor } from './Seed'
-
-import seedrandom from 'seedrandom'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5

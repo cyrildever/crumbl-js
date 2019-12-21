@@ -2,13 +2,13 @@ import * as chai from 'chai'
 import 'mocha'
 chai.should()
 
+import fs from 'fs'
+
 import { Crumbl } from '../../../../lib/src/typescript/core/Crumbl'
 import { DEFAULT_HASH_ENGINE } from '../../../../lib/src/typescript/crypto'
 import { ECIES_ALGORITHM, getPublicKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
 import { RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto/rsa'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
-
-import fs from 'fs'
 
 const owner1_pubkey = getPublicKeyBuffer(fs.readFileSync('test/src/typescript/crypto/ecies/keys/owner1.pub', 'utf-8'))
 const trustee1_pubkey = getPublicKeyBuffer(fs.readFileSync('test/src/typescript/crypto/ecies/keys/trustee1.pub', 'utf-8'))

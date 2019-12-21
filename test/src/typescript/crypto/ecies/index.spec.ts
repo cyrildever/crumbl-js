@@ -5,12 +5,11 @@ chai.use(chaiAsPromised)
 chai.should()
 const expect = chai.expect
 
-import * as ecies from '@rooot/ecies'
 import * as eciesjs from 'eciesjs'
-
-import { encrypt, decrypt, getPrivateKeyBuffer, getPublicKeyBuffer } from '../../../../../lib/src/typescript/crypto/ecies'
-
 import fs from 'fs'
+
+import * as ecies from '@rooot/ecies'
+import { encrypt, decrypt, getPrivateKeyBuffer, getPublicKeyBuffer } from '../../../../../lib/src/typescript/crypto/ecies'
 
 describe('crypto/ecies', () => {
     // Equivalent to 'crumbl-exe/crypto/ecies/ecies_test.go' tests

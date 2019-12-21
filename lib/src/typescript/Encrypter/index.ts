@@ -1,10 +1,9 @@
 import { Base64 } from '../models/Base64'
 import { Crumb } from './Crumb'
-import { Signer } from '../models/Signer'
-import { Slice } from '../Slicer/index'
-
 import * as ecies from '../crypto/ecies'
 import * as rsa from '../crypto/rsa'
+import { Signer } from '../models/Signer'
+import { Slice } from '../Slicer/index'
 
 export const encrypt = async (data: Slice, index: number, s: Signer): Promise<Crumb> => {
     let crypted = ''

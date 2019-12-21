@@ -2,8 +2,8 @@ import * as chai from 'chai'
 import 'mocha'
 chai.should()
 
-import { Crumb, parse, toCrumb } from '../../../../lib/src/typescript/Encrypter/Crumb'
 import { Base64 } from '../../../../lib/src/typescript/models/Base64'
+import { Crumb, parse, toCrumb } from '../../../../lib/src/typescript/Encrypter/Crumb'
 
 describe('Crumb', () => {
     // Equivalent to 'crumbl-exe/encrypter/crumb_test.go' tests

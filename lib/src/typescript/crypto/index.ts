@@ -1,4 +1,5 @@
 import hasher = require('js-sha256')
+
 import { ECIES_ALGORITHM, getPublicKeyBuffer, getPrivateKeyBuffer } from './ecies'
 import { RSA_ALGORITHM } from './rsa'
 

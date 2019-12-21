@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { Collector } from '../Decrypter/Collector'
 import { Crumb, toCrumb } from '../Encrypter/Crumb'
 import { decrypt } from '../Decrypter'
@@ -7,8 +9,6 @@ import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Uncrumb } from '../Decrypter/Uncrumb'
 import { VERSION } from './Crumbl'
-
-import fs from 'fs'
 
 export class Uncrumbl {
     crumbled: string

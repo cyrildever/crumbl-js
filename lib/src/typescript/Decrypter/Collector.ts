@@ -1,5 +1,5 @@
-import { Uncrumb } from './Uncrumb'
 import { hash } from '../crypto/index'
+import { Uncrumb } from './Uncrumb'
 import { unpad } from '../utils/padding'
 
 export class Collector {

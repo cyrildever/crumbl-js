@@ -1,4 +1,4 @@
-var isBase64 = require('is-base64')
+const isBase64 = require('is-base64')
 
 export class Base64 {
     encoded: string

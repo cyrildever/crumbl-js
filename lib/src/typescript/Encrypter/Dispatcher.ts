@@ -1,6 +1,6 @@
-import { Signer } from '../models/Signer'
-
 import seedrandom from 'seedrandom'
+
+import { Signer } from '../models/Signer'
 
 export class Dispatcher {
     numberOfSlices: number

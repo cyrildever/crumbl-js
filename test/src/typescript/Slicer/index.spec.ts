@@ -2,8 +2,8 @@ import * as chai from 'chai'
 import 'mocha'
 chai.should()
 
-import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
+import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
 
 const slice1: Slice = '11111'
 const slice2: Slice = '22222'

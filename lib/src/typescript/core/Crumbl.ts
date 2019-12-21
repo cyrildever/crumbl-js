@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { Crumb } from '../Encrypter/Crumb'
 import { Dispatcher } from '../Encrypter/Dispatcher'
 import { encrypt } from '../Encrypter'
@@ -7,8 +9,6 @@ import { logger, ERROR, SUCCESS } from '../utils/logger'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Slicer, getDeltaMax, MAX_SLICES, MIN_INPUT_SIZE } from '../Slicer'
-
-import fs from 'fs'
 
 export const VERSION = '1' // TODO Change when necessary (change of hash algorithm, modification of string structure, etc.)
 

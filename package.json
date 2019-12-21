@@ -2,19 +2,22 @@
   "name": "crumbl-js",
   "version": "1.0.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib/src/typescript/index.js",
+  "types": "dist/lib/src/typescript/index.d.ts",
+  "browser": "dist/crumbl-js.min.js",
   "scripts": {
+    "browserify": "browserify dist/lib/src/typescript/index.js | uglifyjs > dist/crumbl-js.min.js",
     "build": "eslint . --ext .ts --fix && tsc",
     "example": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
-    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register"
+    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register",
+    "prepare": "npm run build && npm run browserify"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edgewhere/crumbl-js.git"
   },
   "author": "Edgewhere",
-  "license": "ISC",
+  "license": "EULA",
   "bugs": {
     "url": "https://github.com/edgewhere/crumbl-js/issues"
   },
@@ -27,13 +30,15 @@
     "@types/typescript": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
+    "browserify": "^16.5.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-react": "^7.17.0",
     "mocha": "^6.2.2",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "uglify-js": "^3.7.2"
   },
   "dependencies": {
     "@rooot/ecies": "github:Methrat0n/ecies-parity#52816593d609dbc21844e585ce16631332f1b57c",

@@ -99,11 +99,11 @@ console.log(verificationHash)
 ```
 
 
-### Licence ###
+### License ###
 
-The use of the Crumbl&trade; library for commercial purpose is subject to fees. All technologies are protected by patents owned by Edgewhere.
+The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [EULA](LICENSE.md) terms for everyone. All technologies are protected by patents owned by Edgewhere SAS.
 Please [contact us](mailto:contact@edgehere.fr) to get further information.
 
 
 <hr />
-&copy; 2019-2020 Edgewhere SAS
+&copy; 2019-2020 Edgewhere SAS. All rights reserved.

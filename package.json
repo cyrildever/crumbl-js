@@ -16,7 +16,15 @@
     "type": "git",
     "url": "git+https://github.com/edgewhere/crumbl-js.git"
   },
-  "author": "Edgewhere",
+  "keywords": [
+    "crypto",
+    "cryptography",
+    "crumbl",
+    "data protection",
+    "secure storage",
+    "third-party"
+  ],
+  "author": "Edgewhere <contact@edgewhere.fr>",
   "license": "EULA",
   "bugs": {
     "url": "https://github.com/edgewhere/crumbl-js/issues"

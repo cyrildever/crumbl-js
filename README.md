@@ -98,6 +98,9 @@ const verificationHash = client.hash("theDataToCrumbl")
 console.log(verificationHash)
 ```
 
+#### Go Library ####
+
+You might want to check out the Go implementation for the Crumbl&trade;: [`crumbl-exe`](https://github.com/edgewhere/crumbl-exe), an executable and a Go client for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Edgewhere.
 
 ### License ###
 

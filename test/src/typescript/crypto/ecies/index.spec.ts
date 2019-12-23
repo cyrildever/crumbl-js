@@ -52,7 +52,7 @@ describe('crypto/ecies', () => {
             const decrypted = decrypt(encrypted, privkey2)
             expect(decrypted).to.be.rejectedWith('Incorrect MAC')
         })
-        // Adapted from '@rooot-ecies/test/typescript/node.specs.ts' tests
+        // Adapted from 'ecies-geth/test/typescript/node.specs.ts' tests
         it('should fail to decrypt if encrypted with another keypair', async () => {
             const msg = Buffer.from('BFimUWhXgnYhTPo7CAQfxBcctdESBrpB/0ECaTPArpxNFr9hLUIJ2nLEwxm2F6xFu8d5sgA9QJqI/Y/PVDem9IxuiFJsAU+4CeUVKYw/nSwwt4Nco8EGBgPY03ekxLD2T3Zp0Z+jowTPtCGHwtuwYE+INwjQgti0Io6E1Q==', 'base64')
             const owner1Pub = Buffer.from('04e315a987bd79b9f49d3a1c8bd1ef5a401a242820d52a3f22505da81dfcd992cc5c6e2ae9bc0754856ca68652516551d46121daa37afc609036ab5754fe7a82a3', 'hex')

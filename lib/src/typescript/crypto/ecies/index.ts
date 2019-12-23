@@ -1,5 +1,6 @@
-import ecies = require('@rooot/ecies')
 import * as eciesjs from 'eciesjs'
+
+const ecies = require('ecies-geth')
 
 export const ECIES_ALGORITHM = 'ecies'
 

@@ -8,7 +8,7 @@ const expect = chai.expect
 import * as eciesjs from 'eciesjs'
 import fs from 'fs'
 
-import * as ecies from '@rooot/ecies'
+const ecies = require('ecies-geth')
 import { encrypt, decrypt, getPrivateKeyBuffer, getPublicKeyBuffer } from '../../../../../lib/src/typescript/crypto/ecies'
 
 describe('crypto/ecies', () => {

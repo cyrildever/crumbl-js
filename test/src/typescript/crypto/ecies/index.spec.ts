@@ -5,10 +5,10 @@ chai.use(chaiAsPromised)
 chai.should()
 const expect = chai.expect
 
+import * as ecies from 'ecies-geth'
 import * as eciesjs from 'eciesjs'
 import fs from 'fs'
 
-const ecies = require('ecies-geth')
 import { encrypt, decrypt, getPrivateKeyBuffer, getPublicKeyBuffer } from '../../../../../lib/src/typescript/crypto/ecies'
 
 describe('crypto/ecies', () => {

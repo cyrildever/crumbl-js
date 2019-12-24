@@ -30,9 +30,15 @@ export class Dispatcher {
                 break
             }
             case 2: {
-                // Slices should be equally splitted between the two trustees
+                // Slices should all be in double but first and last
                 for (let i = 1; i < this.numberOfSlices; i++) {
-                    allocation.set(i, [this.trustees[i % 2]])
+                    if (i == 1) {
+                        allocation.set(i, [this.trustees[0]])
+                    } else if (i == this.numberOfSlices - 1) {
+                        allocation.set(i, [this.trustees[1]])
+                    } else {
+                        allocation.set(i, [this.trustees[0], this.trustees[1]])
+                    }
                 }
                 break
             }

@@ -4,9 +4,8 @@ chai.should()
 
 import fs from 'fs'
 
-import { ECIES_ALGORITHM, getPrivateKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
-import { hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../../../../lib/src/typescript/crypto'
-import { RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto/rsa'
+import { getPrivateKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
+import { hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH, ECIES_ALGORITHM, RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 import { Uncrumb, toUncrumb, PARTIAL_PREFIX } from '../../../../lib/src/typescript/Decrypter/Uncrumb'
 import { Uncrumbl } from '../../../../lib/src/typescript/core/Uncrumbl'

@@ -1,12 +1,13 @@
 import hasher = require('js-sha256')
 
-import { ECIES_ALGORITHM, getPublicKeyBuffer, getPrivateKeyBuffer } from './ecies'
-import { RSA_ALGORITHM } from './rsa'
+import { getPublicKeyBuffer, getPrivateKeyBuffer } from './ecies'
 
 export const DEFAULT_HASH_ENGINE = 'sha-256'
 export const DEFAUT_HASH_LENGTH = 64
 
-const authorizedAlgorithms = ['ecies', 'rsa']
+export const ECIES_ALGORITHM = 'ecies'
+export const RSA_ALGORITHM = 'rsa'
+const authorizedAlgorithms = [ECIES_ALGORITHM, RSA_ALGORITHM]
 
 /**
  * Test whether the passed algorithm is compliant with the current system

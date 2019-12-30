@@ -12,7 +12,7 @@ import { encrypt, decrypt } from '../../../../../lib/src/typescript/crypto/rsa'
 describe('crypto/rsa', () => {
     // Equivalent to 'crumbl-exe/crypto/rsa/rsa_test.go' tests
     describe('encrypt/decrypt', () => {
-        it('should be deterministic', () => {
+        it('should be working as expected', () => {
             const expected = 'Edgewhere'
 
             const pubkey = fs.readFileSync('test/src/typescript/crypto/rsa/keys/trustee2.pub')

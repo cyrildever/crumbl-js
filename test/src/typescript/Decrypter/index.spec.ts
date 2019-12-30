@@ -10,9 +10,9 @@ import fs from 'fs'
 import { Base64 } from '../../../../lib/src/typescript/models/Base64'
 import { Crumb } from '../../../../lib/src/typescript/Encrypter/Crumb'
 import { decrypt } from '../../../../lib/src/typescript/Decrypter'
-import { ECIES_ALGORITHM, getPrivateKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
+import { ECIES_ALGORITHM, RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto'
 import { encrypt } from '../../../../lib/src/typescript/Encrypter'
-import { RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto/rsa'
+import { getPrivateKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 
 describe('Decrypter', () => {

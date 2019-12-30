@@ -1,8 +1,6 @@
 import * as ecies from 'ecies-geth'
 import * as eciesjs from 'eciesjs'
 
-export const ECIES_ALGORITHM = 'ecies'
-
 /**
  * Eventually returns the ECIES-encrypted buffer of the passed message
  * 

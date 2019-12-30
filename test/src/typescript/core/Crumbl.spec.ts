@@ -5,9 +5,8 @@ chai.should()
 import fs from 'fs'
 
 import { Crumbl } from '../../../../lib/src/typescript/core/Crumbl'
-import { DEFAULT_HASH_ENGINE } from '../../../../lib/src/typescript/crypto'
-import { ECIES_ALGORITHM, getPublicKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
-import { RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto/rsa'
+import { DEFAULT_HASH_ENGINE, ECIES_ALGORITHM, RSA_ALGORITHM } from '../../../../lib/src/typescript/crypto'
+import { getPublicKeyBuffer } from '../../../../lib/src/typescript/crypto/ecies'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 
 const owner1_pubkey = getPublicKeyBuffer(fs.readFileSync('test/src/typescript/crypto/ecies/keys/owner1.pub', 'utf-8'))

@@ -1,5 +1,6 @@
 import { Base64 } from '../models/Base64'
 import { Crumb } from './Crumb'
+import { ECIES_ALGORITHM, RSA_ALGORITHM } from '../crypto'
 import * as ecies from '../crypto/ecies'
 import * as rsa from '../crypto/rsa'
 import { Signer } from '../models/Signer'
@@ -9,13 +10,13 @@ export const encrypt = async (data: Slice, index: number, s: Signer): Promise<Cr
     let crypted = ''
     if (s.publicKey != null) {
         switch (s.encryptionAlgorithm) {
-            case ecies.ECIES_ALGORITHM: {
+            case ECIES_ALGORITHM: {
                 // IMPORTANT: the signer's public key hexadecimal string has to be passed through the `ecies.getPublicKeyBuffer()` function beforehand
                 const ciphered = await ecies.encrypt(Buffer.from(data), s.publicKey)
                 crypted = ciphered.toString('base64')
                 break
             }
-            case rsa.RSA_ALGORITHM:
+            case RSA_ALGORITHM:
                 crypted = rsa.encrypt(Buffer.from(data), s.publicKey)
                 break
             default:

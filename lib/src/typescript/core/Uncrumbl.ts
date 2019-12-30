@@ -77,21 +77,16 @@ export class Uncrumbl {
         let indexSet = new Map<number, boolean>()
         for (let i = 0; i < crumbs.length; i++) {
             const idx = crumbs[i].index
-            if (!indexSet.has(idx) && indexSet.get(idx)! != true) {
+            if (!indexSet.has(idx) || indexSet.get(idx)! != true) {
                 indexSet.set(idx, true)
             }
-
-            if (!this.isOwner && idx == 0) {
-                continue
-            } else if (this.isOwner && idx != 0) {
+            if ((!this.isOwner && idx == 0) || (this.isOwner && idx != 0)) {
                 continue
             }
-
             try {
                 const uncrumb = await decrypt(crumbs[i], this.signer)
                 if (!uncrumbs.has(uncrumb.index)) {
                     uncrumbs.set(idx, uncrumb)
-
                 }
             } catch (e) {
                 // NO-OP

@@ -1,5 +1,6 @@
 import { Base64 } from '../models/Base64'
 import { Crumb } from '../Encrypter/Crumb'
+import { ECIES_ALGORITHM, RSA_ALGORITHM } from '../crypto'
 import * as ecies from '../crypto/ecies'
 import { LEFT_PADDING_CHARACTER, RIGHT_PADDING_CHARACTER } from '../../../../lib/src/typescript/utils/padding'
 import * as rsa from '../crypto/rsa'
@@ -10,13 +11,13 @@ export const decrypt = async (c: Crumb, s: Signer): Promise<Uncrumb> => {
     let decrypted = ''
     if (s.privateKey != null) {
         switch (s.encryptionAlgorithm) {
-            case ecies.ECIES_ALGORITHM: {
+            case ECIES_ALGORITHM: {
                 // IMPORTANT: the signer's private key hexadecimal string has to be passed through the `ecies.getPrivateKeyBuffer()` function beforehand
                 const deciphered = await ecies.decrypt(c.encrypted.toBytes(), s.privateKey)
                 decrypted = deciphered.toString('base64')
                 break
             }
-            case rsa.RSA_ALGORITHM: {
+            case RSA_ALGORITHM: {
                 const deciphered = rsa.decrypt(c.encrypted.toString(), s.privateKey)
                 if (deciphered.includes(LEFT_PADDING_CHARACTER) || deciphered.includes(RIGHT_PADDING_CHARACTER)) {
                     decrypted = Buffer.from(deciphered, 'utf-8').toString('base64')

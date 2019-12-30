@@ -102,6 +102,12 @@ console.log(verificationHash)
 
 You might want to check out the Go implementation for the Crumbl&trade;: [`crumbl-exe`](https://github.com/edgewhere/crumbl-exe), an executable and a Go client for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Edgewhere.
 
+
+#### Scala Library ####
+
+You might also want to check out the Scala implementation for the Crumbl&trade;: [`crumbl-jar`](https://github.com/edgewhere/crumbl-jar), a Scala client for the JVM and an executable JAR as well.
+
+
 ### License ###
 
 The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [EULA](LICENSE.md) terms for everyone. All technologies are protected by patents owned by Edgewhere SAS.

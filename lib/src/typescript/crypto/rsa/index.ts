@@ -1,8 +1,6 @@
 const forge = require('node-forge')
 const pki = forge.pki
 
-export const RSA_ALGORITHM = 'rsa'
-
 /**
  * Encrypt a message with RSA-OAEP and returns the base64-encoded cipher text
  * 

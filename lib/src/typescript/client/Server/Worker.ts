@@ -47,7 +47,7 @@ export class ServerWorker {
     }
 
     /**
-     * Main method to get things done in the Crumbl&trade; system.
+     * Main method to get things done in the Crumbl&trade; system server-side.
      */
     async process(): Promise<string> {
         // Check mode

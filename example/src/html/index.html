@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Crumbl JS example</title>
+  <style>
+    .data {
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section>
+      <h1>Crumbl&trade; JS example</h1>
+      <p>Source: <span id="source" class="data">cdever@edgewhere.fr</span></p>
+      <p>Crumbled: <span id="crumbled" class="data"></span></p>
+      <p>Partial 1: <span id="uncrumb1" class="data"></span></p>
+      <p>Partial 2: <span id="uncrumb2" class="data"></span></p>
+      <p>Uuncrumbled: <span id="uncrumbled" class="data"></span></p>
+    </section>
+  </main>
+  <hr />
+  <footer>&copy; Edgewhere - 2019/2020</footer>
+
+  <script src="../../../dist/crumbljs.min.js"></script>
+  <script src="keys.js"></script>
+  <script type="text/javascript">
+    const source = document.getElementById('source').innerHTML;
+
+    // Stakeholders
+    const owner = {
+      encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
+      publicKey: crumbljs.string2Buffer(owner_pubkey, 'hex'),
+      privateKey: crumbljs.string2Buffer(owner_privkey, 'hex')
+    };
+    const trustee1 = {
+      encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
+      publicKey: crumbljs.string2Buffer(trustee1_pubkey, 'hex'),
+      privateKey: crumbljs.string2Buffer(trustee1_privkey, 'hex')
+    };
+    const trustee2 = {
+      encryptionAlgorithm: crumbljs.RSA_ALGORITHM,
+      publicKey: crumbljs.string2Buffer(trustee2_pubkey, 'utf-8'),
+      privateKey: crumbljs.string2Buffer(trustee2_privkey, 'utf-8')
+    };
+
+    const workerCreator = new crumbljs.BrowserWorker({
+      mode: crumbljs.CREATION,
+      data: [source],
+      verificationHash: 'bad-hash-to-raise-warning-on-purpose', // a good hash could be used on production to check integrity of input before creation
+      htmlElement: document.getElementById('crumbled')
+    });
+    workerCreator.create([owner], [trustee1, trustee2]).then(crumbled => {
+      console.log(crumbled);
+      const workerExtractor1 = new crumbljs.BrowserWorker({
+        mode: crumbljs.EXTRACTION,
+        data: [
+          crumbled ? crumbled : '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d0000a8BJTkFAnzpe4fPWZWbZwaI68NbLq++xD6tKPnFcl3yWnmUKI3Evk1Ax3WZbqsU1uurEcGH9Kfjdmgm+/qjaUSilBCUwTfXE/SgDTVY0OYnFe/g3xN7gwOTUEUF470c00LDo/ns1dXULzZw6iunztApfptXbUVR590WX8Jsg==010158NwuvJKqSgOQjPveYXoCepULX3NtYAVXMCBioeq8bFi+MZWJVTmzYYIsZSpNJ3QvXV3QcaQHVXlQrtR05QatnGkiJqy9a0KZjQRzrYhatNqv+2PqIoFMHQ+Z+uiOYca0GuDEu293xMsdRv8Bh3FfQaCR5vt1iyCsyHwS0wEkfx0ubkZii27nXJH4ZADy8KGZIZqOhZ/PYSiDAqeUanMYCsMMpKKe34yhhsXNjuiNZxlkmoPMIgnR+9M4Qv2rqlW/2kiFAbEVv96GHH+TIT0tfUMlqpxc+3TJWMX+8xD8fdHU84INxFt5p0BEZypRJZEpkkzVEiPCoSU21apzT9CN8ew==0200a8BHiSlQ7Xj0QAH5+rpyfannbxj77iFokh+jdc1wj3QnxrLyjFAO6KfYaec0WujUdE7FOv2pV7Ch2WiJAwSz05VWbWY9zuHWVg24Ohl6XoLRS4E5nQMK1YKwZuCfl9otaVljrjcROtMv7kdaHFhQaq8vXd5m6XBiaJMnWXcQ==.1'
+        ],
+        htmlElement: document.getElementById('uncrumb1')
+      });
+      workerExtractor1.extract(trustee1, false).then(uncrumb1 => {
+        console.log(uncrumb1);
+        const workerExtractor2 = new crumbljs.BrowserWorker({
+          mode: crumbljs.EXTRACTION,
+          data: [
+            crumbled ? crumbled : '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d0000a8BJTkFAnzpe4fPWZWbZwaI68NbLq++xD6tKPnFcl3yWnmUKI3Evk1Ax3WZbqsU1uurEcGH9Kfjdmgm+/qjaUSilBCUwTfXE/SgDTVY0OYnFe/g3xN7gwOTUEUF470c00LDo/ns1dXULzZw6iunztApfptXbUVR590WX8Jsg==010158NwuvJKqSgOQjPveYXoCepULX3NtYAVXMCBioeq8bFi+MZWJVTmzYYIsZSpNJ3QvXV3QcaQHVXlQrtR05QatnGkiJqy9a0KZjQRzrYhatNqv+2PqIoFMHQ+Z+uiOYca0GuDEu293xMsdRv8Bh3FfQaCR5vt1iyCsyHwS0wEkfx0ubkZii27nXJH4ZADy8KGZIZqOhZ/PYSiDAqeUanMYCsMMpKKe34yhhsXNjuiNZxlkmoPMIgnR+9M4Qv2rqlW/2kiFAbEVv96GHH+TIT0tfUMlqpxc+3TJWMX+8xD8fdHU84INxFt5p0BEZypRJZEpkkzVEiPCoSU21apzT9CN8ew==0200a8BHiSlQ7Xj0QAH5+rpyfannbxj77iFokh+jdc1wj3QnxrLyjFAO6KfYaec0WujUdE7FOv2pV7Ch2WiJAwSz05VWbWY9zuHWVg24Ohl6XoLRS4E5nQMK1YKwZuCfl9otaVljrjcROtMv7kdaHFhQaq8vXd5m6XBiaJMnWXcQ==.1'
+          ],
+          verificationHash: '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d', // clearly optional for trusted third-party
+          htmlElement: document.getElementById('uncrumb2')
+        });
+        workerExtractor2.extract(trustee2, false).then(uncrumb2 => {
+          console.log(uncrumb2);
+          const workerOwner = new crumbljs.BrowserWorker({
+            mode: crumbljs.EXTRACTION,
+            data: [
+              crumbled ? crumbled : '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d0000a8BJTkFAnzpe4fPWZWbZwaI68NbLq++xD6tKPnFcl3yWnmUKI3Evk1Ax3WZbqsU1uurEcGH9Kfjdmgm+/qjaUSilBCUwTfXE/SgDTVY0OYnFe/g3xN7gwOTUEUF470c00LDo/ns1dXULzZw6iunztApfptXbUVR590WX8Jsg==010158NwuvJKqSgOQjPveYXoCepULX3NtYAVXMCBioeq8bFi+MZWJVTmzYYIsZSpNJ3QvXV3QcaQHVXlQrtR05QatnGkiJqy9a0KZjQRzrYhatNqv+2PqIoFMHQ+Z+uiOYca0GuDEu293xMsdRv8Bh3FfQaCR5vt1iyCsyHwS0wEkfx0ubkZii27nXJH4ZADy8KGZIZqOhZ/PYSiDAqeUanMYCsMMpKKe34yhhsXNjuiNZxlkmoPMIgnR+9M4Qv2rqlW/2kiFAbEVv96GHH+TIT0tfUMlqpxc+3TJWMX+8xD8fdHU84INxFt5p0BEZypRJZEpkkzVEiPCoSU21apzT9CN8ew==0200a8BHiSlQ7Xj0QAH5+rpyfannbxj77iFokh+jdc1wj3QnxrLyjFAO6KfYaec0WujUdE7FOv2pV7Ch2WiJAwSz05VWbWY9zuHWVg24Ohl6XoLRS4E5nQMK1YKwZuCfl9otaVljrjcROtMv7kdaHFhQaq8vXd5m6XBiaJMnWXcQ==.1',
+              uncrumb1 ? uncrumb1 : '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%02AgICAgJcRwkYUkI=.1',
+              uncrumb2 ? uncrumb2 : '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%01AgICAnYEVQMOTg8=.1'
+            ],
+            verificationHash: '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d',
+            htmlElement: document.getElementById('uncrumbled')
+          });
+          workerOwner.extract(owner, true).then(uncrumbled => {
+            console.log(uncrumbled);
+          })
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -56,6 +56,13 @@ export class BrowserWorker {
             result = await crumbl.toHTML(this.htmlElement!)
         }
 
+        // Optionally check verification hash
+        if (result && this.verificationHash) {
+            if (!result.startsWith(this.verificationHash!)) {
+                logger.log('verification hash is not coherent with data source', WARNING) // TODO Change it as an error?
+            }
+        }
+
         return result
     }
 

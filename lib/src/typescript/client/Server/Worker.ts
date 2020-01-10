@@ -193,6 +193,15 @@ export class ServerWorker {
                 } else {
                     result = (await uncrumbl.toFile(this.output!)).toString()
                 }
+
+                // Check verification hash
+                if (this.verificationHash && isOwner) {
+                    const hashedResult = hash(result) // TODO add hashEngine in worker and pass it here?
+                    if (hashedResult != this.verificationHash) {
+                        logger.log('verification hash is not coherent with uncrumbled data', WARNING) // TODO Change it as an error?
+                    }
+                }
+
                 break
             }
         }

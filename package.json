@@ -6,7 +6,7 @@
   "types": "dist/lib/src/typescript/index.d.ts",
   "browser": "dist/crumbljs.min.js",
   "scripts": {
-    "browserify": "browserify lib/src/typescript/index.ts --debug -p tsify -s crumblejs -o dist/crumbljs.js",
+    "browserify": "browserify lib/src/typescript/index.ts --debug -p tsify -s crumbljs -o dist/crumbljs.js",
     "minify": "terser dist/crumbljs.js -c -m -o dist/crumbljs.min.js",
     "build": "eslint . --ext .ts --fix && tsc",
     "example": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",

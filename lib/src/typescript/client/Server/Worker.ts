@@ -1,15 +1,14 @@
 import fs from 'fs'
 
-import { Crumbl, VERSION } from '../core/Crumbl'
-import { existsAlgorithm, getKeyBuffer, hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../crypto'
-import { logger, ERROR, WARNING } from '../utils/logger'
-import { Signer } from '../models/Signer'
-import { Uncrumb, toUncrumb, PARTIAL_PREFIX } from '../Decrypter/Uncrumb'
-import { Uncrumbl } from '../core/Uncrumbl'
+import { Crumbl, VERSION } from '../../core/Crumbl'
+import { CrumblMode, CREATION, EXTRACTION } from '../index'
+import { existsAlgorithm, getKeyBuffer, hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../../crypto'
+import { logger, ERROR, WARNING } from '../../utils/logger'
+import { Signer } from '../../models/Signer'
+import { Uncrumb, toUncrumb, PARTIAL_PREFIX } from '../../Decrypter/Uncrumb'
+import { Uncrumbl } from '../../core/Uncrumbl'
 
-export type CrumblMode = string
-
-export type Worker = {
+export type Agent = {
     mode: CrumblMode
     data: Array<string>
     input?: string
@@ -22,10 +21,7 @@ export type Worker = {
     htmlElement?: HTMLElement
 }
 
-export const CREATION: CrumblMode = 'crumbl'
-export const EXTRACTION: CrumblMode = 'uncrumbl'
-
-export class CrumblWorker {
+export class ServerWorker {
     mode: CrumblMode
     data: Array<string>
     input?: string
@@ -37,17 +33,17 @@ export class CrumblWorker {
     verificationHash?: string
     htmlElement?: HTMLElement
 
-    constructor(worker: Worker) {
-        this.mode = worker.mode
-        this.data = worker.data
-        this.input = worker.input
-        this.output = worker.output
-        this.ownerKeys = worker.ownerKeys
-        this.ownerSecret = worker.ownerSecret
-        this.signerKeys = worker.signerKeys
-        this.signerSecret = worker.signerSecret
-        this.verificationHash = worker.verificationHash
-        this.htmlElement = worker.htmlElement
+    constructor(agent: Agent) {
+        this.mode = agent.mode
+        this.data = agent.data
+        this.input = agent.input
+        this.output = agent.output
+        this.ownerKeys = agent.ownerKeys
+        this.ownerSecret = agent.ownerSecret
+        this.signerKeys = agent.signerKeys
+        this.signerSecret = agent.signerSecret
+        this.verificationHash = agent.verificationHash
+        this.htmlElement = agent.htmlElement
     }
 
     /**

@@ -4,13 +4,15 @@
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
-  "browser": "dist/crumbl-js.min.js",
+  "browser": "dist/crumbljs.min.js",
   "scripts": {
-    "browserify": "browserify dist/lib/src/typescript/index.js | uglifyjs > dist/crumbl-js.min.js",
+    "browserify": "browserify lib/src/typescript/index.ts --debug -p tsify -s crumblejs -o dist/crumbljs.js",
+    "minify": "terser dist/crumbljs.js -c -m -o dist/crumbljs.min.js",
     "build": "eslint . --ext .ts --fix && tsc",
     "example": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
     "test": "mocha 'test/**/*.spec.ts' --require ts-node/register",
-    "prepare": "npm run build && npm run browserify"
+    "testBrowser": "live-server --port=9001 --mount=/:example/src/html/",
+    "prepare": "npm run build && npm run browserify && npm run minify"
   },
   "repository": {
     "type": "git",
@@ -45,10 +47,12 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-react": "^7.17.0",
+    "live-server": "^1.2.1",
     "mocha": "^6.2.2",
+    "terser": "^4.6.2",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3",
-    "uglify-js": "^3.7.2"
+    "tsify": "^4.0.1",
+    "typescript": "^3.7.3"
   },
   "dependencies": {
     "ecies-geth": "^1.0.1",

@@ -50,7 +50,6 @@ export class BrowserWorker {
         // Build returned result
         let result = ''
         const crumbl = new Crumbl(this.data[0], DEFAULT_HASH_ENGINE, owners, trustees)
-        console.log(this.htmlElement)
         if (!this.htmlElement) {
             result = await crumbl.process()
         } else {

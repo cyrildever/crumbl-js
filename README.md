@@ -1,6 +1,6 @@
 # crumbl-js
 
-crumbl-js is a Javascript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
+crumbl-js is a JavaScript/TypeScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
 
 If you're interesting in using the library, please [contact us](mailto:contact@edgewhere.fr).
 
@@ -30,20 +30,20 @@ The first step involves at least two stakeholders, but preferably four for optim
     * After, collecting all the partial uncrumbs, the data owner should inject them in the system along with the _crumbl_ and his own keypair to get the fully-deciphered data.
 
 
-All these steps could be done building an integrated app utilizing the [Javascript library](#javascript-library) below.
+All these steps could be done building an integrated app utilizing the [TypeScript library](#typescript-library) server-side, or the [JavaScript library](#javascript-library) in the browser.
 
 
 ### Usage ###
 
-#### Javascript Library ####
+#### TypeScript Library ####
 
 ```console
-user:~$ npm install crumbl-js
+npm install crumbl-js
 ```
 _NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
 
 ```typescript
-import * as client from 'crumbl-js'
+import * as crumbljs from 'crumbl-js'
 ```
 
 Construct a new `CrumblWorker` client by creating a `Worker` object and passing to its fields all the arguments needed.
@@ -51,8 +51,8 @@ Then, launch its process.
 
 For example, the code below creates a new crumbl from the passed data:
 ```typescript
-const worker: client.Worker = {
-    mode: client.CREATION,
+const agent: crumbljs.Agent = {
+    mode: crumbljs.CREATION,
     input: "",
     output: "myFile.dat",
     ownerKeys: "ecies:path/to/myKey.pub",
@@ -62,21 +62,17 @@ const worker: client.Worker = {
     verificationHash: "",
     data: ["theDataToCrumbl"]
 }
-const crumbl = new client.CrumblWorker(worker)
-try {
-    // Handle promise...
-    crumbl.process().then(crumbled => {
-        // Do sth with it or use the output file
-    })
-    // ... or block execution
-    const crumbled = await crumbl.process()
-} catch (e) {
-    console.log(e)
-}
+const crumbl = new crumbljs.ServerWorker(agent)
+// Handle promise...
+crumbl.process().then(crumbled => {
+    // Do sth with it or use the output file
+})
+// ... or block execution
+const crumbled = await crumbl.process()
 ```
 
-The value for the fields of the `Worker` are the following:
-* `mode`: either `client.CREATION` to crumbl or `client.EXTRACTION` to uncrumbl;
+The value for the fields of the `Agent` are the following:
+* `mode`: either `crumbljs.CREATION` to crumbl or `crumbljs.EXTRACTION` to uncrumbl;
 * `input`: path to the file to read an existing crumbl from (WARNING: do not add it in the `data` field in that case);
 * `output`: path to a file to save the result to;
 * `ownerKeys`: a comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of owner(s);
@@ -94,8 +90,53 @@ If the user is one of the trusted signing third-parties, using the extraction mo
 
 All successful results should start with the hexadecimal representation of the verification hash which can also be computed from the source using the crumbl-js library:
 ```typescript
-const verificationHash = client.hash("theDataToCrumbl")
+const verificationHash = crumbljs.hash("theDataToCrumbl")
 console.log(verificationHash)
+```
+
+#### JavaScript library ####
+
+```console
+git clone https://github.com/edgewhere/crumbl-js/ && cd crumbl-js && npm i
+```
+_NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
+
+To make it work in the browser, you may use the Javascript library in your html:
+```html
+<script src="dist/crumbljs.min.js"></script>
+```
+
+For example, the code below should display a new crumbl from the passed credential strings of the stakeholders:
+```javascript
+function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
+    const source = document.getElementById('source').innerHTML;
+
+    // Feed with the signers' credentials
+    const owner = {
+        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
+        publicKey: crumbljs.string2Buffer(owner_pubkey, 'hex') // ECIES hexadecimal string
+    };
+    const trustee1 = {
+        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
+        publicKey: crumbljs.string2Buffer(trustee1_pubkey, 'hex')
+    };
+    const trustee2 = {
+        encryptionAlgorithm: crumbljs.RSA_ALGORITHM,
+        publicKey: crumbljs.string2Buffer(trustee2_pubkey, 'utf-8') // RSA PEM file content
+    };
+
+    const workerCreator = new crumbljs.BrowserWorker({
+        mode: crumbljs.CREATION,
+        data: [source],
+        verificationHash: crumbljs.hash(source),
+        htmlElement: document.getElementById('crumbled')
+    });
+    workerCreator.create([owner], [trustee1, trustee2]).then(crumbled => {
+        // At this point, the crumbled value would have been assigned to the passed HTML element.
+        // But you may want to do something else with it here.
+        console.log(crumbled);
+    }
+}
 ```
 
 #### Go Library ####

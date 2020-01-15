@@ -33,6 +33,12 @@ export class BrowserWorker {
         }
     }
 
+    /**
+     * Create a new crumbl using the passed credentials
+     * 
+     * @param owners    A list of data owners
+     * @param trustees  A list of third-party signers
+     */
     async create(owners: Array<Signer>, trustees: Array<Signer>): Promise<string> {
         // Check mode coherence
         if (this.mode != CREATION) {
@@ -50,25 +56,28 @@ export class BrowserWorker {
             result = await crumbl.toHTML(this.htmlElement!)
         }
 
+        // Optionally check verification hash
+        if (result && this.verificationHash) {
+            if (!result.startsWith(this.verificationHash!)) {
+                logger.log('verification hash is not coherent with data source', WARNING) // TODO Change it as an error?
+            }
+        }
+
         return result
     }
 
+    /**
+     * Extract either the partial uncrumbs or the fully-decrypted value for the passed signer
+     * 
+     * @param user      The signer credentials
+     * @param isOwner   Pass `true` if the user is a data owner, `false` otherwise
+     */
     async extract(user: Signer, isOwner: boolean): Promise<string> {
         // Check mode coherence
         if (this.mode != EXTRACTION) {
             const msg = 'invalid mode: ' + this.mode
             logger.log(msg, ERROR)
             throw new Error(msg)
-        }
-
-        // Check verification hash
-        if (!this.verificationHash || this.verificationHash! == '') {
-            logger.log('verification hash is missing', WARNING)
-        } else if (this.verificationHash) {
-            const hashedSource = hash(this.data[0]) // TODO add hashEngine in worker and pass it here?
-            if (hashedSource != this.verificationHash) {
-                logger.log('verification hash is not coherent with data source', WARNING) // TODO Change it as an error?
-            }
         }
 
         // Get the partial uncrumbs
@@ -102,6 +111,16 @@ export class BrowserWorker {
             result = (await uncrumbl.process()).toString()
         } else {
             result = (await uncrumbl.toHTML(this.htmlElement!)).toString()
+        }
+
+        // Check verification hash
+        if (!this.verificationHash || this.verificationHash! == '') {
+            logger.log('verification hash is missing', WARNING)
+        } else if (this.verificationHash && isOwner) {
+            const hashedResult = hash(result) // TODO add hashEngine in worker and pass it here?
+            if (hashedResult != this.verificationHash) {
+                logger.log('verification hash is not coherent with uncrumbled data', WARNING) // TODO Change it as an error?
+            }
         }
 
         return result

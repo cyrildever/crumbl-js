@@ -16,7 +16,12 @@ export const logger = {
  * @param status the status type: 'SUCCESS' | 'ERROR' | 'WARNING' | 'INFO' | 'DEBUG' (default) | etc.
  */
 function log(msg: any, status: string = DEBUG) {
-    let logLineDetails = ((new Error().stack)!.split('at ')[3]).trim()
+    let logLineDetails = ' '
+    try {
+        logLineDetails = '- [' + ((new Error().stack)!.split('at ')[3]).trim() + ']'
+    } catch (e) {
+        // NO-OP
+    }
     const now = new Date()
-    console.log(now.toLocaleDateString(), now.toLocaleTimeString(), status, msg, '- [' + logLineDetails + ']')
+    console.log(now.toLocaleDateString(), now.toLocaleTimeString(), status, msg, logLineDetails)
 }

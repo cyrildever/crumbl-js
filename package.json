@@ -9,9 +9,9 @@
     "browserify": "browserify lib/src/typescript/index.ts --debug -p tsify -s crumbljs -o dist/crumbljs.js",
     "minify": "terser dist/crumbljs.js -c -m -o dist/crumbljs.min.js",
     "build": "eslint . --ext .ts --fix && tsc",
-    "example": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
+    "exampleBrowser": "live-server --port=9001 --mount=/:example/src/html/",
+    "exampleServer": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
     "test": "mocha 'test/**/*.spec.ts' --require ts-node/register",
-    "testBrowser": "live-server --port=9001 --mount=/:example/src/html/",
     "prepare": "npm run build && npm run browserify && npm run minify"
   },
   "repository": {
@@ -55,7 +55,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
-    "ecies-geth": "^1.0.1",
+    "ecies-geth": "^1.0.2",
     "eciesjs": "^0.3.3",
     "is-base64": "^1.0.0",
     "js-sha256": "^0.9.0",

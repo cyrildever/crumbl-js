@@ -101,9 +101,9 @@ git clone https://github.com/edgewhere/crumbl-js/ && cd crumbl-js && npm i
 ```
 _NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
 
-To make it work in the browser, you may use the Javascript library in your html:
+To make it work in the browser, you may use the minified Javascript library in your html:
 ```html
-<script src="dist/crumbljs.min.js"></script>
+<script src="dist/crumbljs-<version>.min.js"></script>
 ```
 
 For example, the code below should display a new crumbl from the passed credential strings of the stakeholders:

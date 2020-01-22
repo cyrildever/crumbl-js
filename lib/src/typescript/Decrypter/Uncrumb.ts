@@ -23,8 +23,8 @@ export class Uncrumb {
 }
 
 export const toUncrumb = (unparsed: string): Uncrumb => {
-    const parsed = parse(unparsed)
-    const u = new Uncrumb(new Base64(parsed[1]), parsed[0])
+    const [index, deciphered] = parse(unparsed)
+    const u = new Uncrumb(new Base64(deciphered), index)
     return u
 }
 

@@ -65,4 +65,3 @@ typings/
 build
 dist
 .vscode
-package-lock.json

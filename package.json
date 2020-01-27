@@ -1,0 +1,73 @@
+{
+  "name": "crumbl-js",
+  "version": "1.0.0",
+  "description": "Secure data storage with trusted third-parties to use in Javascript environment",
+  "main": "dist/lib/src/typescript/index.js",
+  "types": "dist/lib/src/typescript/index.d.ts",
+  "browser": "dist/crumbljs.min.js",
+  "scripts": {
+    "browserify": "browserify lib/src/typescript/index.ts --debug -p tsify -s crumbljs -o dist/crumbljs-${npm_package_version}.js",
+    "minify": "terser dist/crumbljs-${npm_package_version}.js -c -m -o dist/crumbljs-${npm_package_version}.min.js",
+    "build": "eslint . --ext .ts --fix && tsc",
+    "exampleBrowser": "cp dist/crumbljs-${npm_package_version}.min.js example/src/html/crumbljs.min.js && live-server --port=9001 --mount=/:example/src/html/",
+    "exampleServer": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
+    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register",
+    "prepare": "npm run build && npm run browserify && npm run minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgewhere/crumbl-js.git"
+  },
+  "keywords": [
+    "crypto",
+    "cryptography",
+    "crumbl",
+    "data protection",
+    "secure storage",
+    "third-party"
+  ],
+  "author": "Edgewhere <contact@edgewhere.fr>",
+  "license": "EULA",
+  "bugs": {
+    "url": "https://github.com/edgewhere/crumbl-js/issues"
+  },
+  "homepage": "https://github.com/edgewhere/crumbl-js#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.21",
+    "@types/node-forge": "^0.9.0",
+    "@types/seedrandom": "^2.4.28",
+    "@types/typescript": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "browserify": "^16.5.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "ecies-geth": "^1.0.2",
+    "eciesjs": "^0.3.3",
+    "eslint": "^6.7.2",
+    "eslint-plugin-react": "^7.17.0",
+    "feistel-cipher": "^1.0.0",
+    "is-base64": "^1.0.0",
+    "js-sha256": "^0.9.0",
+    "live-server": "^1.2.1",
+    "mocha": "^6.2.2",
+    "node-forge": "^0.9.1",
+    "seedrandom": "^3.0.5",
+    "terser": "^4.6.2",
+    "ts-node": "^8.5.4",
+    "tsify": "^4.0.1",
+    "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "ecies-geth": "^1.0.2",
+    "eciesjs": "^0.3.3",
+    "feistel-cipher": "^1.0.0",
+    "is-base64": "^1.0.0",
+    "js-sha256": "^0.9.0",
+    "node-forge": "^0.9.1",
+    "seedrandom": "^3.0.5"
+  }
+}

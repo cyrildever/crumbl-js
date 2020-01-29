@@ -4,3 +4,5 @@ example
 lib
 test
 .vscode
+dist/crumbljs*.js 
+*.tgz

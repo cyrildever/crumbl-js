@@ -1,6 +1,6 @@
 {
   "name": "@edgewhere/crumbl-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -11,8 +11,7 @@
     "build": "eslint . --ext .ts --fix && tsc",
     "exampleBrowser": "cp dist/crumbljs-${npm_package_version}.min.js example/src/html/crumbljs.min.js && live-server --port=9001 --mount=/:example/src/html/",
     "exampleServer": "eslint . --ext .ts --fix && tsc && node dist/example/src/typescript/main.js",
-    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register",
-    "prepare": "npm run build && npm run browserify && npm run minify"
+    "test": "mocha 'test/**/*.spec.ts' --require ts-node/register"
   },
   "repository": {
     "type": "git",

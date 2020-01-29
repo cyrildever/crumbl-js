@@ -1,5 +1,5 @@
 {
-  "name": "crumbl-js",
+  "name": "@edgewhere/crumbl-js",
   "version": "1.0.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",

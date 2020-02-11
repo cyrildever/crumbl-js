@@ -20,14 +20,9 @@ export class Collector {
      * 
      * @param data 
      */
-    check(data: Buffer): boolean {
-        let hashedData = ''
-        try {
-            hashedData = hash(data.toString(), this.hashEngine)
-        } catch (e) {
-            return false
-        }
-        return hashedData == this.verificationHash
+    check(data: Buffer): Promise<boolean> {
+      return hash(data.toString(), this.hashEngine)
+        .then(hashedData => hashedData === Buffer.from(this.verificationHash))
     }
 
     /**

@@ -117,8 +117,8 @@ export class BrowserWorker {
         if (!this.verificationHash || this.verificationHash! == '') {
             logger.log('verification hash is missing', WARNING)
         } else if (this.verificationHash && isOwner) {
-            const hashedResult = hash(result) // TODO add hashEngine in worker and pass it here?
-            if (hashedResult != this.verificationHash) {
+            const hashedResult = await hash(result) // TODO add hashEngine in worker and pass it here?
+            if (hashedResult !== Buffer.from(this.verificationHash)) {
                 logger.log('verification hash is not coherent with uncrumbled data', WARNING) // TODO Change it as an error?
             }
         }

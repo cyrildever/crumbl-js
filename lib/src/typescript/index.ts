@@ -1,6 +1,5 @@
 export * from './client'
 export * from './client/Browser/Worker'
-export * from './client/Server/Worker'
 export * from './core/Crumbl'
 export * from './core/Uncrumbl'
 export * from './Decrypter'

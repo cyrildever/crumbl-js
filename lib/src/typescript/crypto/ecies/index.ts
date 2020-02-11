@@ -1,5 +1,4 @@
 import * as ecies from 'ecies-geth'
-import * as eciesjs from 'eciesjs'
 
 /**
  * Eventually returns the ECIES-encrypted buffer of the passed message
@@ -8,7 +7,7 @@ import * as eciesjs from 'eciesjs'
  * @param publicKey the hexadecimal string representation of the public key passed through the `getPublicKeyBuffer()` function
  */
 export const encrypt = (msg: Buffer, publicKey: Buffer): Promise<Buffer> => {
-    return ecies.encrypt(publicKey, msg)
+  return ecies.encrypt(publicKey, msg)
 }
 
 /**
@@ -18,14 +17,5 @@ export const encrypt = (msg: Buffer, publicKey: Buffer): Promise<Buffer> => {
  * @param privateKey the hexadecimal string representation of the private key passed through the `getPrivateKeyBuffer()` function
  */
 export const decrypt = (ciphered: Buffer, privateKey: Buffer): Promise<Buffer> => {
-    return ecies.decrypt(privateKey, ciphered)
+  return ecies.decrypt(privateKey, ciphered)
 }
-
-export const getPrivateKeyBuffer = (key: string): Buffer => {
-    return eciesjs.PrivateKey.fromHex(key).secret
-}
-
-export const getPublicKeyBuffer = (key: string): Buffer => {
-    return eciesjs.PublicKey.fromHex(key).uncompressed
-}
-

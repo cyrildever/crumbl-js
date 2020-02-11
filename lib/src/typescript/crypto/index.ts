@@ -11,7 +11,7 @@ const authorizedAlgorithms = [ECIES_ALGORITHM, RSA_ALGORITHM]
  * @param name the algorithm code name to test
  */
 export const existsAlgorithm = (name: string): boolean => {
-    return authorizedAlgorithms.includes(name)
+  return authorizedAlgorithms.includes(name)
 }
 
 /**
@@ -21,9 +21,9 @@ export const existsAlgorithm = (name: string): boolean => {
  * @param hashEngine the name of the hash engine (default: `sha-256`)
  * @returns the hexadecimal representation of the hashed data
  */
-export const hash = (data: string, hashEngine: string = DEFAULT_HASH_ENGINE): Promise<Buffer> => new Promise((resolve, reject) => {
+export const hash = (data: string, hashEngine: string = DEFAULT_HASH_ENGINE): Promise<string> => new Promise((resolve, reject) => {
   if (hashEngine !== DEFAULT_HASH_ENGINE)
     reject(new Error('invalid hash engine'))
 
-  resolve(crypto.subtle.digest(hashEngine, Buffer.from(data)).then(Buffer.from))
+  resolve(crypto.subtle.digest(hashEngine, Buffer.from(data)).then(digested => Buffer.from(digested).toString('hex')))
 })

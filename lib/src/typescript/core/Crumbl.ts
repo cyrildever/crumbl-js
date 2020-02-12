@@ -1,11 +1,8 @@
-import fs from 'fs'
-
 import { Crumb } from '../Encrypter/Crumb'
 import { Dispatcher } from '../Encrypter/Dispatcher'
 import { encrypt } from '../Encrypter'
 import { hash, DEFAULT_HASH_ENGINE } from '../crypto'
 import { START_PADDING_CHARACTER } from '../utils'
-import { logger, ERROR, SUCCESS } from '../utils/logger'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Slicer, getDeltaMax, MAX_SLICES, MIN_INPUT_SIZE } from '../Slicer'
@@ -27,17 +24,6 @@ export class Crumbl {
 
   async process(): Promise<string> {
     return await this.doCrumbl()
-  }
-
-  async toFile(filename: string): Promise<string> {
-    const crumbled = await this.doCrumbl()
-    try {
-      fs.writeFileSync(filename, crumbled + '\n', 'utf-8')
-      logger.log('crumbl successfully saved to ' + filename, SUCCESS)
-    } catch (e) {
-      logger.log('crumbl could not be saved to ' + filename, ERROR)
-    }
-    return crumbled
   }
 
   async toHTML(element: HTMLElement): Promise<string> {

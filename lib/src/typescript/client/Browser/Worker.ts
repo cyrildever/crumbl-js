@@ -1,7 +1,6 @@
 import { Crumbl, VERSION } from '../../core/Crumbl'
-import { CrumblMode, CREATION, EXTRACTION } from '../index'
+import { CrumblMode, CREATION, EXTRACTION } from '..'
 import { hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../../crypto'
-import { logger, ERROR, WARNING } from '../../utils/logger'
 import { Signer } from '../../models/Signer'
 import { Uncrumb, PARTIAL_PREFIX, toUncrumb } from '../../Decrypter/Uncrumb'
 import { Uncrumbl } from '../../core/Uncrumbl'
@@ -28,7 +27,6 @@ export class BrowserWorker {
     // Check data
     if (this.data.length == 0) {
       const msg = 'no data to use'
-      logger.log(msg, ERROR)
       throw new Error(msg)
     }
   }
@@ -42,9 +40,7 @@ export class BrowserWorker {
   async create(owners: Array<Signer>, trustees: Array<Signer>): Promise<string> {
     // Check mode coherence
     if (this.mode != CREATION) {
-      const msg = 'invalid mode: ' + this.mode
-      logger.log(msg, ERROR)
-      throw new Error(msg)
+      return Promise.reject(new Error(`invalid mode: ${this.mode}`))
     }
 
     // Build returned result
@@ -59,7 +55,7 @@ export class BrowserWorker {
     // Optionally check verification hash
     if (result !== '' && this.verificationHash !== '' && this.verificationHash !== undefined) {
       if (!result.startsWith(this.verificationHash)) {
-        logger.log('verification hash is not coherent with data source', WARNING) // TODO Change it as an error?
+        return Promise.reject(new Error('verification hash is not coherent with data source'))
       }
     }
 
@@ -75,9 +71,7 @@ export class BrowserWorker {
   async extract(user: Signer, isOwner: boolean): Promise<string> {
     // Check mode coherence
     if (this.mode != EXTRACTION) {
-      const msg = 'invalid mode: ' + this.mode
-      logger.log(msg, ERROR)
-      throw new Error(msg)
+      return Promise.reject(`invalid mode:  ${this.mode}`)
     }
 
     // Get the partial uncrumbs
@@ -86,8 +80,7 @@ export class BrowserWorker {
       for (let i = 1; i < this.data.length; i++) {
         const parts = this.data[i].split('.', 2)
         if (parts[1] != VERSION) {
-          logger.log('wrong version for uncrumb: ' + this.data[i], WARNING)
-          continue
+          return Promise.reject(`wrong version for uncrumb: ${this.data[i]}`)
         }
         const vh = parts[0].substr(0, DEFAUT_HASH_LENGTH)
         if (vh != '' && vh == this.verificationHash) {
@@ -118,11 +111,11 @@ export class BrowserWorker {
 
     // Check verification hash
     if (this.verificationHash === '') {
-      logger.log('verification hash is missing', WARNING)
+      return Promise.reject(new Error('verification hash is missing'))
     } else if (isOwner) {
       const hashedResult = await hash(result) // TODO add hashEngine in worker and pass it here?
       if (hashedResult !== this.verificationHash) {
-        logger.log('verification hash is not coherent with uncrumbled data', WARNING) // TODO Change it as an error?
+        return Promise.reject(new Error('verification hash is not coherent with uncrumbled data'))
       }
     }
 

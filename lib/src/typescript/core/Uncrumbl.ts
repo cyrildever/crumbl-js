@@ -1,10 +1,7 @@
-import fs from 'fs'
-
 import { Collector } from '../Decrypter/Collector'
 import { Crumb, toCrumb } from '../Encrypter/Crumb'
 import { decrypt } from '../Decrypter'
 import { DEFAUT_HASH_LENGTH, DEFAULT_HASH_ENGINE } from '../crypto'
-import { logger, ERROR, SUCCESS, WARNING } from '../utils/logger'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Uncrumb } from '../Decrypter/Uncrumb'
@@ -29,17 +26,6 @@ export class Uncrumbl {
     return this.doUncrumbl()
   }
 
-  async toFile(filename: string): Promise<Buffer> {
-    const uncrumbled = await this.doUncrumbl()
-    try {
-      fs.writeFileSync(filename, uncrumbled.toString() + '\n', 'utf-8')
-      logger.log('result saved in ' + filename, SUCCESS)
-    } catch (e) {
-      logger.log('uncrumbl could not be saved to ' + filename, ERROR)
-    }
-    return uncrumbled
-  }
-
   async toHTML(element: HTMLElement): Promise<Buffer> {
     const uncrumbled = await this.doUncrumbl()
     element.innerText = uncrumbled.toString()
@@ -50,12 +36,12 @@ export class Uncrumbl {
     // 1- Parse
     const parts = this.crumbled.split('.', 2)
     if (parts[1] != VERSION) {
-      throw new Error('incompatible version: ' + parts[1])
+      return Promise.reject(new Error('incompatible version: ' + parts[1]))
     }
 
     const verificationHash = parts[0].substr(0, DEFAUT_HASH_LENGTH)
     if (verificationHash != this.verificationHash) {
-      logger.log('incompatible input verification hash with crumbl', WARNING) // TODO throw error instead?
+      return Promise.reject(new Error('incompatible input verification hash with crumbl'))
     }
 
     const crumbs = new Array<Crumb>()
@@ -102,9 +88,8 @@ export class Uncrumbl {
       hasAllCrumbs = true
     }
     if (this.isOwner && !hasAllCrumbs) {
-      logger.log('missing crumbs to fully uncrumbl as data owner: only partial uncrumbs are returned', WARNING)
+      return Promise.reject(new Error('missing crumbs to fully uncrumbl as data owner: only partial uncrumbs are returned'))
     }
-    let uncrumbled = ''
     if (hasAllCrumbs) {
       // Owner may recover fully-deciphered data
       const collector = new Collector(uncrumbs, indexSet.size, verificationHash, DEFAULT_HASH_ENGINE)
@@ -114,12 +99,8 @@ export class Uncrumbl {
       const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
       const deobfuscated = obfuscator.unapply(obfuscated)
 
-      collector.check(Buffer.from(deobfuscated))
-        .then(isCheck => { if(isCheck) logger.log('source has not checked verification hash', WARNING)} ) // TODO Change it as an error?)
-        .catch(err => logger.log(err)) //Maybe await here ?
-
-      // 7a- Return uncrumbled data, ie. original source normally
-      uncrumbled = deobfuscated
+      return collector.check(Buffer.from(deobfuscated))
+        .then(isCheck => isCheck ? Promise.resolve(Buffer.from(deobfuscated)) : Promise.reject(new Error('source has not checked verification hash')))
     } else {
       // Trustee only could return his own uncrumbs
 
@@ -133,9 +114,8 @@ export class Uncrumbl {
       }
 
       // 6b- Add verification hash prefix
-      uncrumbled = verificationHash + partialUncrumbs + '.' + VERSION
-    }
 
-    return Buffer.from(uncrumbled)
+      return Buffer.from(verificationHash + partialUncrumbs + '.' + VERSION)
+    }
   }
 }

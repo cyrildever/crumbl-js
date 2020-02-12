@@ -1,6 +1,6 @@
 import { hash } from '../crypto/index'
 import { Uncrumb } from './Uncrumb'
-import { unpad } from '../utils/padding'
+import { unpad } from '../utils'
 
 export class Collector {
   map: Map<number, Uncrumb>

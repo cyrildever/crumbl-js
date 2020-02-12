@@ -1,7 +1,8 @@
 import seedrandom from 'seedrandom'
 
-import { leftPad, unpad } from '../utils/padding'
 import { seedFor } from './Seed'
+
+import { unpad, START_PADDING_CHARACTER } from '../utils'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5
@@ -35,7 +36,7 @@ export class Slicer {
     const fixedLength = Math.floor(data.length / this.numberOfSlices) + this.deltaMax
     const slices = new Array<Slice>()
     splits.forEach(split => {
-      const slice = leftPad(split, fixedLength)
+      const slice = split.padStart(fixedLength, START_PADDING_CHARACTER)
       slices.push(slice)
     })
     if (slices.length != this.numberOfSlices) {

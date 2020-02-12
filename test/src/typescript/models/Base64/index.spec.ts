@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { Base64, toBase64 } from '../../../../../lib/src/typescript/models/Base64'
 
 describe('Base64', () => {

@@ -1,13 +1,7 @@
-import * as chai from 'chai'
-import 'mocha'
-import chaiAsPromised from 'chai-as-promised'
-chai.use(chaiAsPromised)
-chai.should()
-const expect = chai.expect
-
-import * as ecies from 'ecies-geth'
-
 import { encrypt, decrypt } from '../../../../../lib/src/typescript/crypto/ecies'
+import { fail } from 'assert'
+
+declare function expect(val: any, message?: string): any
 
 describe('crypto/ecies', () => {
   const pubkey = Buffer.from('04e315a987bd79b9f49d3a1c8bd1ef5a401a242820d52a3f22505da81dfcd992cc5c6e2ae9bc0754856ca68652516551d46121daa37afc609036ab5754fe7a82a3', 'hex')
@@ -47,19 +41,12 @@ describe('crypto/ecies', () => {
       const decrypted1 = await decrypt(encrypted, privkey1)
       decrypted1.toString().should.equal(expected)
 
-      const decrypted = decrypt(encrypted, privkey2)
-      return expect(decrypted).to.be.rejectedWith('Incorrect MAC')
-    })
-    // Adapted from 'ecies-geth/test/typescript/node.specs.ts' tests
-    it('should fail to decrypt if encrypted with another keypair', async () => {
-      const msg = Buffer.from('BFimUWhXgnYhTPo7CAQfxBcctdESBrpB/0ECaTPArpxNFr9hLUIJ2nLEwxm2F6xFu8d5sgA9QJqI/Y/PVDem9IxuiFJsAU+4CeUVKYw/nSwwt4Nco8EGBgPY03ekxLD2T3Zp0Z+jowTPtCGHwtuwYE+INwjQgti0Io6E1Q==', 'base64')
-      const owner1Pub = Buffer.from('04e315a987bd79b9f49d3a1c8bd1ef5a401a242820d52a3f22505da81dfcd992cc5c6e2ae9bc0754856ca68652516551d46121daa37afc609036ab5754fe7a82a3', 'hex')
-
-      const encrypted = await ecies.encrypt(owner1Pub, msg)
-
-      const owner2Secret = Buffer.from('80219e4d24caf16cb4755c1ae85bad02b6a3efb1e3233379af6f2cc1a18442c4', 'hex')
-      const decrypted = ecies.decrypt(owner2Secret, encrypted)
-      return expect(decrypted).to.be.rejectedWith('Incorrect MAC')
+      try {
+        await decrypt(encrypted, privkey2)
+        return fail()
+      } catch (e){
+        return expect(e.message).to.eqls('Incorrect MAC')
+      }
     })
   })
 })

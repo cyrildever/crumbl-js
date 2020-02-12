@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../../../../lib/src/typescript/Obfuscator'
 
 describe('Obfucator', () => {

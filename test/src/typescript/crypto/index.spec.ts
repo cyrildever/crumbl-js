@@ -1,10 +1,5 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { hash, DEFAULT_HASH_ENGINE } from '../../../../lib/src/typescript/crypto/index'
 
-//TODO browser
 describe('crypto', () => {
   describe('hash', () => {
     // Equivalent to 'crumbl-exe/crypto/crypto_test.go' tests

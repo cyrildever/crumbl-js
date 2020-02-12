@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
 import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
 

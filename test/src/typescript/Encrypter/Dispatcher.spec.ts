@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { Dispatcher } from '../../../../lib/src/typescript/Encrypter/Dispatcher'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 

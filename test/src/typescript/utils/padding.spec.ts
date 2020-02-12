@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { leftPad, rightPad, unpad, LEFT_PADDING_CHARACTER } from '../../../../lib/src/typescript/utils/padding'
 
 describe('utils/padding', () => {

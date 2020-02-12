@@ -1,7 +1,3 @@
-import * as chai from 'chai'
-import 'mocha'
-chai.should()
-
 import { Base64 } from '../../../../lib/src/typescript/models/Base64'
 import { Slice } from '../../../../lib/src/typescript/Slicer'
 import { Uncrumb, parse, toUncrumb } from '../../../../lib/src/typescript/Decrypter/Uncrumb'

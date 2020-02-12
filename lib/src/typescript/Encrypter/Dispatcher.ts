@@ -32,9 +32,9 @@ export class Dispatcher {
       case 2: {
         // Slices should all be in double but first and last
         for (let i = 1; i < this.numberOfSlices; i++) {
-          if (i == 1) {
+          if (i === 1) {
             allocation.set(i, [this.trustees[0]])
-          } else if (i == this.numberOfSlices - 1) {
+          } else if (i === this.numberOfSlices - 1) {
             allocation.set(i, [this.trustees[1]])
           } else {
             allocation.set(i, [this.trustees[0], this.trustees[1]])
@@ -68,18 +68,5 @@ export class Dispatcher {
         throw new Error('wrong number of trustees')
     }
     return allocation
-  }
-
-  private contains(signers: Array<Signer>, item: Signer): boolean {
-    for (let i = 0; i < signers.length; i++) {
-      const signerPrivateKey = signers[i].privateKey
-      const signerPublicKey = signers[i].publicKey
-      if (signers[i] != null && signers[i].encryptionAlgorithm == item.encryptionAlgorithm &&
-          (signers[i].privateKey == null || signers[i].privateKey != null && signerPrivateKey !== undefined && signerPrivateKey === item.privateKey) &&
-          (signers[i].publicKey == null || signers[i].publicKey != null && signerPublicKey !== undefined && signerPublicKey === item.publicKey)) {
-        return true
-      }
-    }
-    return false
   }
 }

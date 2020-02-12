@@ -12,9 +12,9 @@ export class Crumb {
   }
 
   equals(otherCrumb: Crumb): boolean {
-    if (this.encrypted.toString() == otherCrumb.encrypted.toString() &&
-            this.index == otherCrumb.index &&
-            this.length == otherCrumb.length) {
+    if (this.encrypted.toString() === otherCrumb.encrypted.toString() &&
+            this.index === otherCrumb.index &&
+            this.length === otherCrumb.length) {
       return true
     }
     return false
@@ -40,7 +40,7 @@ export const parse = (unparsed: string): [number, number, string] => {
   if (!isBase64String(enc)) {
     throw new Error('not a base64-encoded string: ' + enc)
   }
-  if (ln != enc.length) {
+  if (ln !== enc.length) {
     throw new Error('incompatible lengths')
   }
   return [idx, ln, enc]

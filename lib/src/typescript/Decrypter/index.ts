@@ -7,7 +7,7 @@ import { Uncrumb } from './Uncrumb'
 
 export const decrypt = async (c: Crumb, s: Signer): Promise<Uncrumb> => {
   let decrypted = ''
-  if (s.privateKey != null) {
+  if (s.privateKey !== null && s.privateKey !== undefined) {
     switch (s.encryptionAlgorithm) {
       case ECIES_ALGORITHM: {
         // IMPORTANT: the signer's private key hexadecimal string has to be passed through the `ecies.getPrivateKeyBuffer()` function beforehand

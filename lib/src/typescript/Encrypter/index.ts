@@ -7,7 +7,7 @@ import { Slice } from '../Slicer/index'
 
 export const encrypt = async (data: Slice, index: number, s: Signer): Promise<Crumb> => {
   let crypted = ''
-  if (s.publicKey != null) {
+  if (s.publicKey !== null && s.publicKey !== undefined) {
     switch (s.encryptionAlgorithm) {
       case ECIES_ALGORITHM: {
         // IMPORTANT: the signer's public key hexadecimal string has to be passed through the `ecies.getPublicKeyBuffer()` function beforehand

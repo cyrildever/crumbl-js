@@ -39,7 +39,7 @@ export class Slicer {
       const slice = split.padStart(fixedLength, START_PADDING_CHARACTER)
       slices.push(slice)
     })
-    if (slices.length != this.numberOfSlices) {
+    if (slices.length !== this.numberOfSlices) {
       throw new Error('wrong number of slices')
     }
     return slices
@@ -52,7 +52,7 @@ export class Slicer {
      * @returns the concatenated string
      */
   unapply(slices: Array<Slice>): string {
-    if (slices.length == 0) {
+    if (slices.length === 0) {
       throw new Error('impossible to use empty slices')
     }
     const splits = new Array<string>()
@@ -87,7 +87,7 @@ export class Slicer {
         dataLength -= randomNum
       }
     }
-    if (masks.length == 0) {
+    if (masks.length === 0) {
       throw new Error('unable to build split masks')
     }
     return masks

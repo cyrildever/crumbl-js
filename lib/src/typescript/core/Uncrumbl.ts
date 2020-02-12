@@ -35,12 +35,12 @@ export class Uncrumbl {
   private async doUncrumbl(): Promise<Buffer> {
     // 1- Parse
     const parts = this.crumbled.split('.', 2)
-    if (parts[1] != VERSION) {
+    if (parts[1] !== VERSION) {
       return Promise.reject(new Error('incompatible version: ' + parts[1]))
     }
 
     const verificationHash = parts[0].substr(0, DEFAUT_HASH_LENGTH)
-    if (verificationHash != this.verificationHash) {
+    if (verificationHash !== this.verificationHash) {
       return Promise.reject(new Error('incompatible input verification hash with crumbl'))
     }
 
@@ -62,7 +62,7 @@ export class Uncrumbl {
       if (!indexSet.has(idx) || indexSet.get(idx)) { // eslint-disable-line @typescript-eslint/strict-boolean-expressions
         indexSet.set(idx, true)
       }
-      if (!this.isOwner && idx == 0 || this.isOwner && idx != 0) {
+      if (!this.isOwner && idx === 0 || this.isOwner && idx !== 0) {
         continue
       }
       try {
@@ -84,7 +84,7 @@ export class Uncrumbl {
 
     // 4- Determine output
     let hasAllCrumbs = false
-    if (indexSet.size == uncrumbs.size) {
+    if (indexSet.size === uncrumbs.size) {
       hasAllCrumbs = true
     }
     if (this.isOwner && !hasAllCrumbs) {

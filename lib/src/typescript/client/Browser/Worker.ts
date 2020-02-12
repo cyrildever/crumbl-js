@@ -25,7 +25,7 @@ export class BrowserWorker {
     this.htmlElement = p.htmlElement
 
     // Check data
-    if (this.data.length == 0) {
+    if (this.data.length === 0) {
       const msg = 'no data to use'
       throw new Error(msg)
     }
@@ -39,7 +39,7 @@ export class BrowserWorker {
      */
   async create(owners: Array<Signer>, trustees: Array<Signer>): Promise<string> {
     // Check mode coherence
-    if (this.mode != CREATION) {
+    if (this.mode !== CREATION) {
       return Promise.reject(new Error(`invalid mode: ${this.mode}`))
     }
 
@@ -70,7 +70,7 @@ export class BrowserWorker {
      */
   async extract(user: Signer, isOwner: boolean): Promise<string> {
     // Check mode coherence
-    if (this.mode != EXTRACTION) {
+    if (this.mode !== EXTRACTION) {
       return Promise.reject(`invalid mode:  ${this.mode}`)
     }
 
@@ -79,16 +79,16 @@ export class BrowserWorker {
     if (this.data.length > 1) {
       for (let i = 1; i < this.data.length; i++) {
         const parts = this.data[i].split('.', 2)
-        if (parts[1] != VERSION) {
+        if (parts[1] !== VERSION) {
           return Promise.reject(`wrong version for uncrumb: ${this.data[i]}`)
         }
         const vh = parts[0].substr(0, DEFAUT_HASH_LENGTH)
-        if (vh != '' && vh == this.verificationHash) {
+        if (vh !== '' && vh === this.verificationHash) {
           const us = parts[0].substr(DEFAUT_HASH_LENGTH)
           const uncs = us.split(PARTIAL_PREFIX)
           for (let i = 0; i < uncs.length; i++) {
             const unc = uncs[i]
-            if (unc != '') {
+            if (unc !== '') {
               const uncrumb = toUncrumb(unc)
               uncrumbs.push(uncrumb)
             }

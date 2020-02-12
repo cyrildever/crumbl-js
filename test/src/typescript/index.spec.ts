@@ -1,7 +1,7 @@
 import { BrowserWorker, CREATION, ECIES_ALGORITHM } from '../../../lib/src/typescript'
 
 describe('lib', () => {
-  it('should create twice in a row', async () => {
+  it('should create several times in a row', async () => {
     const data = 'qdopdqzpjidqzjoohqefefhouqdouhzhfoqfqzhuzqdhuzdhiuqzhiudqzhiudzhiuqdzihqzdhiu'
     const owner = {
       encryptionAlgorithm: ECIES_ALGORITHM,

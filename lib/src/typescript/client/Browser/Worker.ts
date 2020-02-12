@@ -37,7 +37,7 @@ export class BrowserWorker {
      * @param owners    A list of data owners
      * @param trustees  A list of third-party signers
      */
-  async create(owners: Array<Signer>, trustees: Array<Signer>): Promise<string> {
+  async create(owners: [Signer, ...Array<Signer>], trustees: [Signer, ...Array<Signer>]): Promise<string> {
     // Check mode coherence
     if (this.mode !== CREATION) {
       return Promise.reject(new Error(`invalid mode: ${this.mode}`))

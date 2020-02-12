@@ -12,10 +12,10 @@ export const VERSION = '1' // TODO Change when necessary (change of hash algorit
 export class Crumbl {
   source: string
   hashEngine: string
-  owners: Array<Signer>
-  trustees: Array<Signer>
+  owners: [Signer, ...Array<Signer>]
+  trustees: [Signer, ...Array<Signer>]
 
-  constructor(source: string, hashEngine: string, owners: Array<Signer>, trustees: Array<Signer>) {
+  constructor(source: string, hashEngine: string, owners: [Signer, ...Array<Signer>], trustees: [Signer, ...Array<Signer>]) {
     this.source = source
     this.hashEngine = hashEngine
     this.owners = owners

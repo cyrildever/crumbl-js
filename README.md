@@ -1,6 +1,6 @@
 # crumbl-js
 
-crumbl-js is a JavaScript/TypeScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
+crumbl-js is a JavaScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
 
 If you're interesting in using the library, please [contact us](mailto:contact@edgewhere.fr).
 
@@ -35,79 +35,17 @@ All these steps could be done building an integrated app utilizing the [TypeScri
 
 ### Usage ###
 
-#### TypeScript Library ####
-
-```console
-npm install crumbl-js
-```
-_NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
-
-```typescript
-import * as crumbljs from 'crumbl-js'
-```
-
-Construct a new `CrumblWorker` client by creating a `Worker` object and passing to its fields all the arguments needed.
-Then, launch its process.
-
-For example, the code below creates a new crumbl from the passed data:
-```typescript
-const agent: crumbljs.Agent = {
-    mode: crumbljs.CREATION,
-    input: "",
-    output: "myFile.dat",
-    ownerKeys: "ecies:path/to/myKey.pub",
-    ownerSecret: "",
-    signerKeys: "ecies:path/to/trustee1.pub,rsa:path/to/trustee2.pub",
-    signerSecret: "",
-    verificationHash: "",
-    data: ["theDataToCrumbl"]
-}
-const crumbl = new crumbljs.ServerWorker(agent)
-// Handle promise...
-crumbl.process().then(crumbled => {
-    // Do sth with it or use the output file
-})
-// ... or block execution
-const crumbled = await crumbl.process()
-```
-
-The value for the fields of the `Agent` are the following:
-* `mode`: either `crumbljs.CREATION` to crumbl or `crumbljs.EXTRACTION` to uncrumbl;
-* `input`: path to the file to read an existing crumbl from (WARNING: do not add it in the `data` field in that case);
-* `output`: path to a file to save the result to;
-* `ownerKeys`: a comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of owner(s);
-* `ownerSecret`: filepath to the private key of the owner;
-* `signerKeys`: a comma-separated list of colon-separated encryption algorithm prefix and filepath to public key of trusted signer(s);
-* `signerSecret`: filepath to the private key of the trusted signer;
-* `verificationHash`: optional verification hash of the data;
-* `data`: an array of data to use.
-
-The first and only string in the `data` field should be the source to crumbl when using the creation mode.
-For the extraction mode, the first string in the `data` field should be the crumbled string, except when the `input` field points to it.
-The other strings to provide in the `data` field should be the partial uncrumbs coming from the trustees if the user is one of the data owner.
-
-If the user is one of the trusted signing third-parties, using the extraction mode would return the partial uncrumbs he should return to the owner upon request.
-
-All successful results should start with the hexadecimal representation of the verification hash which can also be computed from the source using the crumbl-js library:
-```typescript
-const verificationHash = crumbljs.hash("theDataToCrumbl")
-console.log(verificationHash)
-```
-
 #### JavaScript library ####
 
 ```console
-git clone https://github.com/edgewhere/crumbl-js/ && cd crumbl-js && npm i
+npm i crumbl-js
 ```
 _NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
 
-To make it work in the browser, you may use the minified Javascript library in your html:
-```html
-<script src="dist/crumbljs-<version>.min.js"></script>
-```
-
 For example, the code below should display a new crumbl from the passed credential strings of the stakeholders:
 ```javascript
+import * as crumbljs from 'crumbl-js'
+
 function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
     const source = document.getElementById('source').innerHTML;
 
@@ -121,8 +59,8 @@ function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
         publicKey: crumbljs.string2Buffer(trustee1_pubkey, 'hex')
     };
     const trustee2 = {
-        encryptionAlgorithm: crumbljs.RSA_ALGORITHM,
-        publicKey: crumbljs.string2Buffer(trustee2_pubkey, 'utf-8') // RSA PEM file content
+        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
+        publicKey: crumbljs.string2Buffer(trustee2_pubkey, 'hex')
     };
 
     const workerCreator = new crumbljs.BrowserWorker({

@@ -13,6 +13,7 @@ describe('lib', () => {
       publicKey: Buffer.from('040c96f971c0edf58fe4afbf8735581be05554a8a725eae2b7ad2b1c6fcb7b39ef4e7252ed5b17940a9201c089bf75cb11f97e5c53333a424e4ebcca36065e0bc0', 'hex'),
       privateKey: Buffer.from('80219e4d24caf16cb4755c1ae85bad02b6a3efb1e3233379af6f2cc1a18442c4', 'hex')
     }
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const done1 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
     const done2 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
     const done3 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
@@ -26,6 +27,7 @@ describe('lib', () => {
     const done11 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
     const done13 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
     const done14 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     
     return true
   })

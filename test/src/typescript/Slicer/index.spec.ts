@@ -1,5 +1,5 @@
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
-import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
+import { Slicer, Slice } from '../../../../lib/src/typescript/Slicer'
 
 const slice1: Slice = '11111'
 const slice2: Slice = '22222'
@@ -12,7 +12,7 @@ describe('Slicer', () => {
     it('should be deterministic', () => {
       const numberOfSlices = 4
       const s1 = Slicer(numberOfSlices, 0)
-      const slices1 = s1.apply('11111222223333344444')
+      const slices1 = s1.slice('11111222223333344444')
       slices1.length.should.equal(numberOfSlices)
       slices1[0].should.equal(slice1)
       slices1[1].should.equal('22222')
@@ -20,7 +20,7 @@ describe('Slicer', () => {
       slices1[3].should.equal('44444')
 
       const s2 = Slicer(numberOfSlices, 2)
-      const slices2 = s2.apply('111111111222222222333333333444444444')
+      const slices2 = s2.slice('111111111222222222333333333444444444')
       slices2.forEach(slice => {
         slice.length.should.equal(11)
       })
@@ -32,24 +32,10 @@ describe('Slicer', () => {
     it('should be deterministic', () => {
       const s1 = Slicer(4, 0)
 
-      const found = s1.unapply([slice1, slice2, slice3, slice4])
+      const found = s1.unslice([slice1, slice2, slice3, slice4])
 
       const expected = '11111222223333344444'
       found.should.equal(expected)
-    })
-  })
-  describe('getDeltaMax', () => {
-    it('should return the right number', () => {
-      let dMax = getDeltaMax(8, 4)
-      dMax.should.equal(0)
-      dMax = getDeltaMax(12, 4)
-      dMax.should.equal(2)
-      dMax = getDeltaMax(16, 4)
-      dMax.should.equal(4)
-      dMax = getDeltaMax(20, 4)
-      dMax.should.equal(5)
-      dMax = getDeltaMax(50, 4)
-      dMax.should.equal(MAX_DELTA)
     })
   })
   describe('seedFor', () => {

@@ -5,9 +5,9 @@ import { seedFor } from './Seed'
 import { unpad, START_PADDING_CHARACTER } from '..'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
-export const MAX_DELTA = 5
+const MAX_DELTA = 5
 export const MIN_INPUT_SIZE = 8 // Input below 8 characters must be left-padded
-export const MIN_SLICE_SIZE = 2
+const MIN_SLICE_SIZE = 2
 
 export type Slice = string
 
@@ -23,18 +23,19 @@ interface Slicer {
    * @param data the data to slice
    * @returns the slices
    */
-  readonly apply: (data: string) => Array<Slice> //TODO rename to slice
+  readonly slice: (data: string) => Array<Slice>
   /**
    * Unslice the passed slices
    * 
    * @param slices the slices to use
    * @returns the concatenated string
    */
-  readonly unapply: (slices: [Slice, ...Array<Slice>]) => string //TODO rename to unslice
+  readonly unslice: (slices: [Slice, ...Array<Slice>]) => string
 }
 
-export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
-  apply: (data: string): Array<Slice> => {
+export const Slicer = (numberOfSlices: number, dataLength: number): Slicer => ({
+  slice: (data: string): Array<Slice> => {
+    const deltaMax = getDeltaMax(dataLength, numberOfSlices)
     const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
     if (slices.length !== numberOfSlices) {
@@ -42,7 +43,7 @@ export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
     }
     return slices
   },
-  unapply: (slices: [Slice, ...Array<Slice>]): string =>
+  unslice: (slices: [Slice, ...Array<Slice>]): string =>
     slices.map(unpad).join('')
 })
 
@@ -88,7 +89,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * @param numberOfSlices the wanted number of slices
  * @returns the maximum gap between the length of slices
  */
-export const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
+const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
   const sliceSize = dataLength / numberOfSlices
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0

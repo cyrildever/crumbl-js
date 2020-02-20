@@ -16,12 +16,17 @@ interface Mask {
   end: number
 }
 
+//TODO a nicer syntax wouls be slice(data).into(numberOfSlices) and unslice(slices) or just slice(data, numberOfSlices)
 interface Slicer {
   /**
-   * Slice the passed data
+   * Slice the passed data into an array of multiple parts.
+   * The number of part is base on the properties `numberOfSlices` and `dataLength` this object was
+   * initialized with.
    * 
-   * @param data the data to slice
-   * @returns the slices
+   * @param data the data to slice. It must be of the right length.
+   * @returns Slices of the data, an array containing `numberOfSlices` element.
+   * 
+   * @throws 'wrong number of slices' if we cannot build an array for this data. Most likely this Slicer isn't meant for this data.
    */
   readonly slice: (data: string) => Array<Slice>
   /**
@@ -51,7 +56,8 @@ const split = (numberOfSlices: number, deltaMax: number, data: string): Array<st
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
     .map(mask => data.substring(mask.start, mask.end))
 
-const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): [Mask, ...Array<Mask>] => {
+//TODO we could initiazlied the masks array with an array of numberOfSlices element, which would grant a garantuee about the number of elements
+const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
   const minLen = Math.max(averageSliceLength - Math.floor(deltaMax / 2), Math.floor(dataLength / (numberOfSlices + 1) + 1))
   const maxLen = Math.min(averageSliceLength + Math.floor(deltaMax / 2), Math.ceil(dataLength / (numberOfSlices - 1) - 1))
@@ -75,10 +81,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
       dataLength -= randomNum
     }
   }
-  if (masks.length === 0) {
-    throw new Error('unable to build split masks')
-  }
-  return masks as [Mask, ...Array<Mask>]
+  return masks
 
 }
 

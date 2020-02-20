@@ -17,10 +17,6 @@ interface Mask {
 }
 
 interface Slicer {
-  //Do I need to expose them ?
-  readonly numberOfSlices: number
-  readonly deltaMax: number
-  
   /**
    * Slice the passed data
    * 
@@ -38,8 +34,6 @@ interface Slicer {
 }
 
 export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
-  numberOfSlices,
-  deltaMax,
   apply: (data: string): Array<Slice> => {
     const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))

@@ -10,15 +10,16 @@ describe('Slicer', () => {
   // Equivalent to 'crumbl-exe/slicer/slicer_test.go' tests
   describe('apply', () => {
     it('should be deterministic', () => {
-      const s1 = Slicer(4, 0)
+      const numberOfSlices = 4
+      const s1 = Slicer(numberOfSlices, 0)
       const slices1 = s1.apply('11111222223333344444')
-      slices1.length.should.equal(s1.numberOfSlices)
+      slices1.length.should.equal(numberOfSlices)
       slices1[0].should.equal(slice1)
       slices1[1].should.equal('22222')
       slices1[2].should.equal('33333')
       slices1[3].should.equal('44444')
 
-      const s2 = Slicer(4, 2)
+      const s2 = Slicer(numberOfSlices, 2)
       const slices2 = s2.apply('111111111222222222333333333444444444')
       slices2.forEach(slice => {
         slice.length.should.equal(11)

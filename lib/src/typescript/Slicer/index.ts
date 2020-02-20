@@ -28,7 +28,7 @@ interface Slicer {
    * 
    * @throws 'wrong number of slices' if we cannot build an array for this data. Most likely this Slicer isn't meant for this data.
    */
-  readonly slice: (data: string) => Array<Slice>
+  readonly slice: (data: string) => [Slice, ...Array<Slice>]
   /**
    * Unslice the passed slices
    * 
@@ -39,14 +39,14 @@ interface Slicer {
 }
 
 export const Slicer = (numberOfSlices: number, dataLength: number): Slicer => ({
-  slice: (data: string): Array<Slice> => {
+  slice: (data: string): [Slice, ...Array<Slice>] => {
     const deltaMax = getDeltaMax(dataLength, numberOfSlices)
     const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
     if (slices.length !== numberOfSlices) {
       throw new Error('wrong number of slices')
     }
-    return slices
+    return slices as [Slice, ...Array<Slice>]
   },
   unslice: (slices: [Slice, ...Array<Slice>]): string =>
     slices.map(unpad).join('')

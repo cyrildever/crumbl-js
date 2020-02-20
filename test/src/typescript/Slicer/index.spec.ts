@@ -8,7 +8,7 @@ const slice4: Slice = '44444'
 
 describe('Slicer', () => {
   // Equivalent to 'crumbl-exe/slicer/slicer_test.go' tests
-  describe('apply', () => {
+  describe('slice', () => {
     it('should be deterministic', () => {
       const numberOfSlices = 4
       const s1 = Slicer(numberOfSlices, 0)
@@ -28,7 +28,7 @@ describe('Slicer', () => {
       slices2[3].should.equal('\u00023444444444') // TODO Different from Go implementation due to random generator: change it?
     })
   })
-  describe('unapply', () => {
+  describe('unslice', () => {
     it('should be deterministic', () => {
       const s1 = Slicer(4, 0)
 
@@ -46,4 +46,15 @@ describe('Slicer', () => {
       found.should.equal(expected)
     })
   })
+  describe('slice/unslice', () => {
+    it('should be invariant', () => {
+      const data = randomString()
+      const slicer = Slicer(10, data.length)
+      const found = slicer.unslice(slicer.slice(data))
+
+      found.should.eqls(data)
+    })
+  })
 })
+
+const randomString = (): string => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)

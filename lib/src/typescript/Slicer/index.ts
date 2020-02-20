@@ -30,7 +30,7 @@ interface Slicer {
    * @param slices the slices to use
    * @returns the concatenated string
    */
-  readonly unapply: (slices: Array<Slice>) => string //TODO rename to unslice
+  readonly unapply: (slices: [Slice, ...Array<Slice>]) => string //TODO rename to unslice
 }
 
 export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
@@ -42,19 +42,15 @@ export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
     }
     return slices
   },
-  unapply: (slices: Array<Slice>): string => {
-    if (slices.length === 0) {
-      throw new Error('impossible to use empty slices')
-    }
-    return slices.map(unpad).join('')
-  }
+  unapply: (slices: [Slice, ...Array<Slice>]): string =>
+    slices.map(unpad).join('')
 })
 
 const split = (numberOfSlices: number, deltaMax: number, data: string): Array<string> =>
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
     .map(mask => data.substring(mask.start, mask.end))
 
-const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
+const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): [Mask, ...Array<Mask>] => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
   const minLen = Math.max(averageSliceLength - Math.floor(deltaMax / 2), Math.floor(dataLength / (numberOfSlices + 1) + 1))
   const maxLen = Math.min(averageSliceLength + Math.floor(deltaMax / 2), Math.ceil(dataLength / (numberOfSlices - 1) - 1))
@@ -81,7 +77,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
   if (masks.length === 0) {
     throw new Error('unable to build split masks')
   }
-  return masks
+  return masks as [Mask, ...Array<Mask>]
 
 }
 

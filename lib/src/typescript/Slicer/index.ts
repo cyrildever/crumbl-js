@@ -32,13 +32,8 @@ export class Slicer {
      * @returns the slices
      */
   apply(data: string): Array<Slice> {
-    const splits = this.split(data)
     const fixedLength = Math.floor(data.length / this.numberOfSlices) + this.deltaMax
-    const slices = new Array<Slice>()
-    splits.forEach(split => {
-      const slice = split.padStart(fixedLength, START_PADDING_CHARACTER)
-      slices.push(slice)
-    })
+    const slices = this.split(data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
     if (slices.length !== this.numberOfSlices) {
       throw new Error('wrong number of slices')
     }
@@ -55,12 +50,7 @@ export class Slicer {
     if (slices.length === 0) {
       throw new Error('impossible to use empty slices')
     }
-    const splits = new Array<string>()
-    slices.forEach(slice => {
-      splits.push(unpad(slice))
-    })
-    const data = splits.join('')
-    return data
+    return slices.map(unpad).join('')
   }
 
   private buildSplitMask(dataLength: number, seed: string): Array<Mask> {
@@ -68,7 +58,7 @@ export class Slicer {
     const minLen = Math.max(averageSliceLength - Math.floor(this.deltaMax / 2), Math.floor(dataLength / (this.numberOfSlices + 1) + 1))
     const maxLen = Math.min(averageSliceLength + Math.floor(this.deltaMax / 2), Math.ceil(dataLength / (this.numberOfSlices - 1) - 1))
     const delta = Math.min(this.deltaMax, maxLen - minLen)
-    const masks = new Array<Mask>()
+    const masks = []
 
     let length = 0
     const rng = seedrandom(seed)
@@ -95,13 +85,8 @@ export class Slicer {
   }
 
   private split(data: string): Array<string> {
-    const masks = this.buildSplitMask(data.length, seedFor(data))
-    const splits = new Array<string>()
-    masks.forEach(m => {
-      splits.push(data.substring(m.start, m.end))
-    })
-    return splits
-  }
+    return this.buildSplitMask(data.length, seedFor(data))
+      .map(mask => data.substring(mask.start, mask.end))
 }
 
 /**

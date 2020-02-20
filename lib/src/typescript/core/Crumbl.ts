@@ -2,7 +2,7 @@ import { Crumb } from '../Encrypter/Crumb'
 import { Dispatcher } from '../Encrypter/Dispatcher'
 import { encrypt } from '../Encrypter'
 import { hash, DEFAULT_HASH_ENGINE } from '../crypto'
-import { START_PADDING_CHARACTER } from '../utils'
+import { START_PADDING_CHARACTER } from '..'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Slicer, getDeltaMax, MAX_SLICES, MIN_INPUT_SIZE } from '../Slicer'
@@ -41,7 +41,7 @@ export class Crumbl {
     // 2- Slice
     const numberOfSlices = 1 + Math.min(this.trustees.length, MAX_SLICES)
     const deltaMax = getDeltaMax(obfuscated.length, numberOfSlices)
-    const slicer = new Slicer(numberOfSlices, deltaMax)
+    const slicer = Slicer(numberOfSlices, deltaMax)
     const slices = slicer.apply(obfuscated.toString().padStart(MIN_INPUT_SIZE, START_PADDING_CHARACTER))
 
     // 3- Encrypt

@@ -1,5 +1,5 @@
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
-import { Slicer, Slice } from '../../../../lib/src/typescript/Slicer'
+import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
 
 const slice1: Slice = '11111'
 const slice2: Slice = '22222'
@@ -36,6 +36,20 @@ describe('Slicer', () => {
 
       const expected = '11111222223333344444'
       found.should.equal(expected)
+    })
+  })
+  describe('getDeltaMax', () => {
+    it('should return the right number', () => {
+      let dMax = getDeltaMax(8, 4)
+      dMax.should.equal(0)
+      dMax = getDeltaMax(12, 4)
+      dMax.should.equal(2)
+      dMax = getDeltaMax(16, 4)
+      dMax.should.equal(4)
+      dMax = getDeltaMax(20, 4)
+      dMax.should.equal(5)
+      dMax = getDeltaMax(50, 4)
+      dMax.should.equal(MAX_DELTA)
     })
   })
   describe('seedFor', () => {

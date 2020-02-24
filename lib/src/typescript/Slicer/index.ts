@@ -5,9 +5,9 @@ import { seedFor } from './Seed'
 import { unpad, START_PADDING_CHARACTER } from '..'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
-const MAX_DELTA = 5
+export const MAX_DELTA = 5
 export const MIN_INPUT_SIZE = 8 // Input below 8 characters must be left-padded
-const MIN_SLICE_SIZE = 2
+export const MIN_SLICE_SIZE = 2
 
 export type Slice = string
 
@@ -38,9 +38,13 @@ interface Slicer {
   readonly unslice: (slices: [Slice, ...Array<Slice>]) => string
 }
 
-export const Slicer = (numberOfSlices: number, dataLength: number): Slicer => ({
+/**
+ * @param numberOfSlices Number of parts to splice data into
+ * @param deltaMax The maximum difference of size between two slices.
+ * It could be generated using `getDeltaMax` or be your specific choice.
+ */
+export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
   slice: (data: string): [Slice, ...Array<Slice>] => {
-    const deltaMax = getDeltaMax(dataLength, numberOfSlices)
     const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
     if (slices.length !== numberOfSlices) {
@@ -86,13 +90,14 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
 }
 
 /**
- * Build the 'deltaMax' value
+ * Find the maximum possible difference of size between two slices.
  * 
  * @param dataLength the length of the source data
  * @param numberOfSlices the wanted number of slices
+ * 
  * @returns the maximum gap between the length of slices
  */
-const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
+export const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
   const sliceSize = dataLength / numberOfSlices
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0

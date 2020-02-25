@@ -72,10 +72,17 @@ const split = (numberOfSlices: number, deltaMax: Delta, data: string): Array<str
   if(numberOfRemainingChars > deltaMax * numberOfSlices)
     throw new Error(`Cannot split a string of length ${data.length} into ${numberOfSlices} chunks with each chunks being able to hold ${maxLen} chars`)
 
-  // each string is averageSliceLength long, last one may be smaller
-  const slices = data.match(new RegExp(`.{1,${averageSliceLength}}`, 'g')) as Array<string> // eslint-disable-line
+  // each string is averageSliceLength long, but we may loose the last chars
+  const slices = data.match(new RegExp(`.{${averageSliceLength}}`, 'g')) as Array<string> // eslint-disable-line
+  const slicesSize = slices.reduce((acc, s) => acc + s.length, 0)
 
   let moves = 0
+  if(slicesSize < data.length) {
+    const remaining = data.length - slicesSize
+    moves = -remaining //Therefore, if the below affectation is beyond deltaMax then the whiles at the bottom will handle it
+    slices[slices.length - 1] = slices[slices.length - 1] + data.substring(slicesSize)
+  }
+
   // evenlySplit.length === numberOfSlices
   for(let i = 0; i < numberOfSlices - 1; i++) { // last one is handle differently
     const move = Math.round(rng() * variance * 2 - variance) // move:  variance >= end >= - variance

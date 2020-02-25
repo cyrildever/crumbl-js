@@ -7,7 +7,7 @@
   "scripts": {
     "build": "eslint . --ext .ts && tsc",
     "fix": "eslint . --ext .ts --fix",
-    "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
+    "test": "tsc && browserify ./dist/test/src/typescript/Slicer/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
   },
   "repository": {
     "type": "git",

@@ -68,12 +68,14 @@ describe('Slicer', () => {
 
       found.should.eqls(data)
     })
-    it('should be find', () => {
-      const data = '4gux0h2dmbgxar0r56ize'
-      const slicer = Slicer(5, getDeltaMax(data.length, 5))
-      const found = slicer.unslice(slicer.slice(data))
+    it('should work under load', () => {
+      for(let i = 0; i < 100000; i++) {
+        const data = randomString()
+        const slicer = Slicer(5, getDeltaMax(data.length, 5))
+        const found = slicer.unslice(slicer.slice(data))
 
-      found.should.eqls(data)
+        found.should.eqls(data)
+      }
     })
   })
 })

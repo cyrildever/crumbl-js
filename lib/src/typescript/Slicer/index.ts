@@ -6,6 +6,7 @@ import { unpad, START_PADDING_CHARACTER } from '..'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5
+export type Delta = 0 | 1 | 2 | 3 | 4 | 5 
 export const MIN_INPUT_SIZE = 8 // Input below 8 characters must be left-padded
 export const MIN_SLICE_SIZE = 2
 
@@ -43,50 +44,54 @@ interface Slicer {
  * @param deltaMax The maximum difference of size between two slices.
  * It could be generated using `getDeltaMax` or be your specific choice.
  */
-export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
-  slice: (data: string): [Slice, ...Array<Slice>] => {
-    const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
-    const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
-    if (slices.length !== numberOfSlices) {
-      throw new Error('wrong number of slices')
-    }
-    return slices as [Slice, ...Array<Slice>]
-  },
-  unslice: (slices: [Slice, ...Array<Slice>]): string =>
-    slices.map(unpad).join('')
-})
+export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => {
+  if(numberOfSlices <= 0)
+    throw new Error(`number of slices too small: ${numberOfSlices}`)
+  return {
+    slice: (data: string): [Slice, ...Array<Slice>] => {
+      if (data.length === 0)
+        throw new Error('unsupported empty data')
+      
+      const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
+      const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
+      return slices as [Slice, ...Array<Slice>]
+    },
+    unslice: (slices: [Slice, ...Array<Slice>]): string =>
+      slices.map(unpad).join('')
+  }
+}
 
 const split = (numberOfSlices: number, deltaMax: number, data: string): Array<string> =>
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
     .map(mask => data.substring(mask.start, mask.end))
 
-//TODO we could initiazlied the masks array with an array of numberOfSlices element, which would grant a garantuee about the number of elements
 const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
-  const minLen = Math.max(averageSliceLength - Math.floor(deltaMax / 2), Math.floor(dataLength / (numberOfSlices + 1) + 1))
-  const maxLen = Math.min(averageSliceLength + Math.floor(deltaMax / 2), Math.ceil(dataLength / (numberOfSlices - 1) - 1))
-  const delta = Math.min(deltaMax, maxLen - minLen)
+  const fullLength = dataLength
   const masks = []
 
+  let catchUp = dataLength - averageSliceLength * numberOfSlices
   let length = 0
+  let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = Math.floor(rng() * (Math.min(maxLen, dataLength) + 1 - minLen) + minLen)
-    const b = Math.floor((dataLength - randomNum) / minLen)
-    const r = Math.floor((dataLength - randomNum) % minLen)
-
-    if (r <= b * delta) {
-      const m: Mask = {
-        start: length,
-        end: length + randomNum
-      }
-      masks.push(m)
-      length += randomNum
-      dataLength -= randomNum
+    const randomNum = rng() * deltaMax / 2 + Math.floor(catchUp / leftRound)
+    let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
+    // General rounding pb corrected at the end
+    if (leftRound == 1 && length + addedNum < fullLength) {
+      addedNum += fullLength - length - addedNum
     }
+    const m: Mask = {
+      start: length,
+      end: length + addedNum
+    }
+    masks.push(m)
+    catchUp = fullLength - length - averageSliceLength * leftRound
+    leftRound--
+    length += addedNum
+    dataLength -= addedNum
   }
   return masks
-
 }
 
 /**
@@ -97,8 +102,11 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * 
  * @returns the maximum gap between the length of slices
  */
-export const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
-  const sliceSize = dataLength / numberOfSlices
+export const getDeltaMax = (dataLength: number, numberOfSlices: number): Delta => {
+  if(numberOfSlices <= 0)
+    throw new Error(`number of slices too small: ${numberOfSlices}`)
+  
+  const sliceSize = Math.floor(dataLength / numberOfSlices)
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0
   }
@@ -111,5 +119,5 @@ export const getDeltaMax = (dataLength: number, numberOfSlices: number): number 
       break
     }
   }
-  return deltaMax
+  return deltaMax as Delta
 }

@@ -1,71 +1,125 @@
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
-import { Slicer, Slice, getDeltaMax, MAX_DELTA } from '../../../../lib/src/typescript/Slicer'
+import { Slicer, getDeltaMax } from '../../../../lib/src/typescript/Slicer'
 
-const slice1: Slice = '11111'
-const slice2: Slice = '22222'
-const slice3: Slice = '33333'
-const slice4: Slice = '44444'
+declare function expect(val: any, message?: string): any
 
 describe('Slicer', () => {
   // Equivalent to 'crumbl-exe/slicer/slicer_test.go' tests
   describe('slice', () => {
-    it('should be deterministic', () => {
+    it('should have numberOfSlices as length', () => {
       const numberOfSlices = 4
-      const s1 = Slicer(numberOfSlices, 0)
-      const slices1 = s1.slice('11111222223333344444')
-      slices1.length.should.equal(numberOfSlices)
-      slices1[0].should.equal(slice1)
-      slices1[1].should.equal('22222')
-      slices1[2].should.equal('33333')
-      slices1[3].should.equal('44444')
+      const slicer = Slicer(numberOfSlices, 0)
+      const slices = slicer.slice('11111222223333344444')
+      slices.length.should.eqls(numberOfSlices)
+    })
+    it('should fail if numberOfSlices === 0', () => {
+      const numberOfSlices = 0
+      expect(() => Slicer(numberOfSlices, 0) ).to.throw('number of slices too small: 0')
+    })
+    it('should fail if numberOfSlices < 0', () => {
+      const numberOfSlices = -3
+      expect(() => Slicer(numberOfSlices, 0) ).to.throw('number of slices too small: -3')
+    })
+    it('should be deterministic for delta max = 0', () => {
+      const slicer = Slicer(4, 0)
+      const slices1 = slicer.slice('11111222223333344444')
+      const slices2 = slicer.slice('11111222223333344444')
+      slices1.should.eqls(slices2) // ['11111', '22222', '33333', '44444']
+    })
+    it('should be deterministic for a small delta max', () => {
+      const slicer = Slicer(4, 2)
+      const slices1 = slicer.slice('111111111222222222333333333444444444')
+      const slices2 = slicer.slice('111111111222222222333333333444444444')
+      slices1.should.eqls(slices2)
+    })
+    it('should produce slices of the same size', () => {
+      const slicer = Slicer(4, 2)
+      const slices = slicer.slice('111111111222222222333333333444444444')
+      const size = slices[0].length
+      slices.every(slice => slice.length === size).should.be.true
+    })
+    it('should work under heavy load', () => {
+      expect(() => { 
+        for (let i = 0; i < 10000; i++) {
+          const data = randomString()
+          const slicer = Slicer(10, getDeltaMax(data.length, 10))
+          slicer.slice(data)
+        }
+      }).to.not.throw()
+    })
+    it('should behave the same as the go implementation', () => {
+      const slicer = Slicer(4, 2)
+      const slices = slicer.slice('111111111222222222333333333444444444')
 
-      const s2 = Slicer(numberOfSlices, 2)
-      const slices2 = s2.slice('111111111222222222333333333444444444')
-      slices2.forEach(slice => {
-        slice.length.should.equal(11)
-      })
-      //slices2[3].should.equal('\u0002\u0002\u000244444444')
-      slices2[3].should.equal('\u00023444444444') // TODO Different from Go implementation due to random generator: change it?
+      slices[3].should.eqls('\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
     })
   })
   describe('unslice', () => {
     it('should be deterministic', () => {
-      const s1 = Slicer(4, 0)
-
-      const found = s1.unslice([slice1, slice2, slice3, slice4])
-
-      const expected = '11111222223333344444'
-      found.should.equal(expected)
+      const slicer = Slicer(4, 0)
+      const found1 = slicer.unslice(['11111', '22222', '33333', '44444'])
+      const found2 = slicer.unslice(['11111', '22222', '33333', '44444'])
+      
+      found1.should.eqls(found2) // '11111222223333344444'
     })
   })
   describe('getDeltaMax', () => {
-    it('should return the right number', () => {
-      let dMax = getDeltaMax(8, 4)
-      dMax.should.equal(0)
-      dMax = getDeltaMax(12, 4)
-      dMax.should.equal(2)
-      dMax = getDeltaMax(16, 4)
-      dMax.should.equal(4)
-      dMax = getDeltaMax(20, 4)
-      dMax.should.equal(5)
-      dMax = getDeltaMax(50, 4)
-      dMax.should.equal(MAX_DELTA)
+    it('should be determinisitic', () => {
+      const found1 = getDeltaMax(25, 4)
+      const found2 = getDeltaMax(25, 4)
+      expect(found1).to.eqls(found2)
+    })
+    it('should return 0 if dataLength <= 8 ', () => {
+      const found = getDeltaMax(5, 1)
+      expect(found).to.eqls(0)
+    })
+    it('should return 0 if dataLength / numberOfSlices === 2', () => {
+      const found = getDeltaMax(5, 10)
+      expect(found).to.eqls(0)
+    })
+    it('should return 0 if dataLength / numberOfSlices < 2', () => {
+      const found = getDeltaMax(5, 5)
+      expect(found).to.eqls(0)
+    })
+    it('should return 0 if dataLength / numberOfSlices === 2 (round down)', () => {
+      const found = getDeltaMax(5, 11)
+      expect(found).to.eqls(0)
+    })
+    it('should fail if numberOfSlices <= 0', () => {
+      expect(() => getDeltaMax(5, 0)).to.throw('number of slices too small: 0')
+    })
+    it('should return 5 for big numbers', () => {
+      const found = getDeltaMax(50000, 1100)
+      expect(found).to.eqls(5)
     })
   })
   describe('seedFor', () => {
     it('should be deterministic', () => {
       const data1 = 'ab'
-      const found = seedFor(data1)
       const expected = '195'
-      found.should.equal(expected)
+      const found = seedFor(data1)
+
+      found.should.eqls(expected)
+    })
+    it('should contains the sum of char codes', () => {
+      const data = randomString()
+      const found = seedFor(data)
+      const sum = Array.from(data).reduce((sum, char) => sum + char.charCodeAt(0), 0)
+      expect(parseInt(found)).to.eqls(sum)
+    })
+    it('should be 0 for empty string', () => {
+      const data = ''
+      const found = seedFor(data)
+      const sum = 0
+      expect(parseInt(found)).to.eqls(sum)
     })
   })
   describe('slice/unslice', () => {
     it('should be invariant', () => {
       const data = randomString()
-      const slicer = Slicer(10, data.length)
+      const slicer = Slicer(10, getDeltaMax(data.length, 10))
       const found = slicer.unslice(slicer.slice(data))
-
+      
       found.should.eqls(data)
     })
   })

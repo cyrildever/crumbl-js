@@ -22,13 +22,15 @@ describe('Slicer', () => {
     })
     it('should be deterministic for delta max = 0', () => {
       const slicer = Slicer(4, 0)
-      const slices = slicer.slice('11111222223333344444')
-      slices.should.eqls(['11111', '22222', '33333', '44444'])
+      const slices1 = slicer.slice('11111222223333344444')
+      const slices2 = slicer.slice('11111222223333344444')
+      slices1.should.eqls(slices2) // ['11111', '22222', '33333', '44444']
     })
     it('should be deterministic for a small delta max', () => {
       const slicer = Slicer(4, 2)
-      const slices = slicer.slice('111111111222222222333333333444444444')
-      slices[3].should.eqls('\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
+      const slices1 = slicer.slice('111111111222222222333333333444444444')
+      const slices2 = slicer.slice('111111111222222222333333333444444444')
+      slices1.should.eqls(slices2)
     })
     it('should produce slices of the same size', () => {
       const slicer = Slicer(4, 2)
@@ -45,17 +47,28 @@ describe('Slicer', () => {
         }
       }).to.not.throw()
     })
+    it('should behave the same as the go implementation', () => {
+      const slicer = Slicer(4, 2)
+      const slices = slicer.slice('111111111222222222333333333444444444')
+
+      slices[3].should.eqls('\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
+    })
   })
   describe('unslice', () => {
     it('should be deterministic', () => {
-      const s1 = Slicer(4, 0)
-      const expected = '11111222223333344444'
-      const found = s1.unslice(['11111', '22222', '33333', '44444'])
+      const slicer = Slicer(4, 0)
+      const found1 = slicer.unslice(['11111', '22222', '33333', '44444'])
+      const found2 = slicer.unslice(['11111', '22222', '33333', '44444'])
       
-      found.should.eqls(expected)
+      found1.should.eqls(found2) // '11111222223333344444'
     })
   })
   describe('getDeltaMax', () => {
+    it('should be determinisitic', () => {
+      const found1 = getDeltaMax(25, 4)
+      const found2 = getDeltaMax(25, 4)
+      expect(found1).to.eqls(found2)
+    })
     it('should return 0 if dataLength <= 8 ', () => {
       const found = getDeltaMax(5, 1)
       expect(found).to.eqls(0)

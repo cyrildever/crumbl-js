@@ -44,18 +44,22 @@ interface Slicer {
  * @param deltaMax The maximum difference of size between two slices.
  * It could be generated using `getDeltaMax` or be your specific choice.
  */
-export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => ({
-  slice: (data: string): [Slice, ...Array<Slice>] => {
-    if (data.length === 0)
-      throw new Error('unsupported empty data')
-    
-    const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
-    const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
-    return slices as [Slice, ...Array<Slice>]
-  },
-  unslice: (slices: [Slice, ...Array<Slice>]): string =>
-    slices.map(unpad).join('')
-})
+export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => {
+  if(numberOfSlices <= 0)
+    throw new Error(`number of slices too small: ${numberOfSlices}`)
+  return {
+    slice: (data: string): [Slice, ...Array<Slice>] => {
+      if (data.length === 0)
+        throw new Error('unsupported empty data')
+      
+      const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
+      const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
+      return slices as [Slice, ...Array<Slice>]
+    },
+    unslice: (slices: [Slice, ...Array<Slice>]): string =>
+      slices.map(unpad).join('')
+  }
+}
 
 const split = (numberOfSlices: number, deltaMax: number, data: string): Array<string> =>
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
@@ -99,6 +103,9 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * @returns the maximum gap between the length of slices
  */
 export const getDeltaMax = (dataLength: number, numberOfSlices: number): Delta => {
+  if(numberOfSlices <= 0)
+    throw new Error(`number of slices too small: ${numberOfSlices}`)
+  
   const sliceSize = Math.floor(dataLength / numberOfSlices)
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0

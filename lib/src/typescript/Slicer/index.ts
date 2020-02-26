@@ -6,6 +6,7 @@ import { unpad, START_PADDING_CHARACTER } from '..'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5
+export type Delta = 0 | 1 | 2 | 3 | 4 | 5 
 export const MIN_INPUT_SIZE = 8 // Input below 8 characters must be left-padded
 export const MIN_SLICE_SIZE = 2
 
@@ -43,9 +44,12 @@ interface Slicer {
  * @param deltaMax The maximum difference of size between two slices.
  * It could be generated using `getDeltaMax` or be your specific choice.
  */
-export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
+export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => ({
   slice: (data: string): [Slice, ...Array<Slice>] => {
-    const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
+    if (data.length === 0)
+      throw new Error('unsupported empty data')
+    
+    const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
     return slices as [Slice, ...Array<Slice>]
   },
@@ -67,7 +71,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
   let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = rng() * deltaMax + catchUp / leftRound - (deltaMax + catchUp / leftRound) / 2
+    const randomNum = rng() * Math.round(deltaMax / 2) + Math.floor(catchUp / leftRound)
     let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
     // General rounding pb corrected at the end
     if (leftRound == 1 && length + addedNum < fullLength) {
@@ -83,13 +87,6 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
     length += addedNum
     dataLength -= addedNum
   }
-  if (masks.length === 0) {
-    throw new Error('unable to build split masks')
-  }
-  if (masks.length != numberOfSlices) {
-    // If a seed behaves weirdly
-    return buildSplitMask(numberOfSlices, deltaMax, fullLength, (parseInt(seed) + 1).toString())
-  }
   return masks
 }
 
@@ -101,7 +98,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * 
  * @returns the maximum gap between the length of slices
  */
-export const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
+export const getDeltaMax = (dataLength: number, numberOfSlices: number): Delta => {
   const sliceSize = Math.floor(dataLength / numberOfSlices)
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0
@@ -115,5 +112,5 @@ export const getDeltaMax = (dataLength: number, numberOfSlices: number): number 
       break
     }
   }
-  return deltaMax
+  return deltaMax as Delta
 }

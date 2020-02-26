@@ -15,16 +15,16 @@ describe('Slicer', () => {
       const slices1 = s1.slice('11111222223333344444')
       slices1.length.should.equal(numberOfSlices)
       slices1[0].should.equal(slice1)
-      slices1[1].should.equal('22222')
-      slices1[2].should.equal('33333')
-      slices1[3].should.equal('44444')
+      slices1[1].should.equal(slice2)
+      slices1[2].should.equal(slice3)
+      slices1[3].should.equal(slice4)
 
       const s2 = Slicer(numberOfSlices, 2)
       const slices2 = s2.slice('111111111222222222333333333444444444')
       slices2.forEach(slice => {
         slice.length.should.equal(11)
       })
-      slices2[3].should.equal('\u0002\u0002444444444') // Different from Go implementation due to random generator
+      slices2[3].should.equal('\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
     })
   })
   describe('unslice', () => {
@@ -64,8 +64,17 @@ describe('Slicer', () => {
       const data = randomString()
       const slicer = Slicer(10, getDeltaMax(data.length, 10))
       const found = slicer.unslice(slicer.slice(data))
-
+      
       found.should.equal(data)
+    })
+    it('should work under heavy load', () => {
+      for (let i = 0; i < 10000; i++) {
+        const data = randomString()
+        const slicer = Slicer(10, getDeltaMax(data.length, 10))
+        const found = slicer.unslice(slicer.slice(data))
+
+        found.should.equal(data)
+      }
     })
   })
 })

@@ -44,29 +44,29 @@ _NB: The repository being still private, this kind of installation is not possib
 
 For example, the code below should display a new crumbl from the passed credential strings of the stakeholders:
 ```javascript
-import * as crumbljs from 'crumbl-js'
+import { BrowserWorker, CREATION, ECIES_ALGORITHM, hash } from 'crumbl-js'
 
 function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
     const source = document.getElementById('source').innerHTML;
 
     // Feed with the signers' credentials
     const owner = {
-        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
-        publicKey: crumbljs.string2Buffer(owner_pubkey, 'hex') // ECIES hexadecimal string
+        encryptionAlgorithm: ECIES_ALGORITHM,
+        publicKey: Buffer.from(owner_pubkey, 'hex') // ECIES hexadecimal string
     };
     const trustee1 = {
-        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
-        publicKey: crumbljs.string2Buffer(trustee1_pubkey, 'hex')
+        encryptionAlgorithm: ECIES_ALGORITHM,
+        publicKey: Buffer.from(trustee1_pubkey, 'hex')
     };
     const trustee2 = {
-        encryptionAlgorithm: crumbljs.ECIES_ALGORITHM,
-        publicKey: crumbljs.string2Buffer(trustee2_pubkey, 'hex')
+        encryptionAlgorithm: ECIES_ALGORITHM,
+        publicKey: Buffer.from(trustee2_pubkey, 'hex')
     };
 
-    const workerCreator = new crumbljs.BrowserWorker({
-        mode: crumbljs.CREATION,
+    const workerCreator = new BrowserWorker({
+        mode: CREATION,
         data: [source],
-        verificationHash: crumbljs.hash(source),
+        verificationHash: hash(source),
         htmlElement: document.getElementById('crumbled')
     });
     workerCreator.create([owner], [trustee1, trustee2]).then(crumbled => {

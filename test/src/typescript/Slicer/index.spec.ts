@@ -24,8 +24,7 @@ describe('Slicer', () => {
       slices2.forEach(slice => {
         slice.length.should.equal(11)
       })
-      //slices2[3].should.equal('\u0002\u0002\u000244444444')
-      slices2[3].should.equal('\u00023444444444') // TODO Different from Go implementation due to random generator: change it?
+      slices2[3].should.equal('\u0002\u0002444444444') // Different from Go implementation due to random generator
     })
   })
   describe('unslice', () => {
@@ -63,10 +62,10 @@ describe('Slicer', () => {
   describe('slice/unslice', () => {
     it('should be invariant', () => {
       const data = randomString()
-      const slicer = Slicer(10, data.length)
+      const slicer = Slicer(10, getDeltaMax(data.length, 10))
       const found = slicer.unslice(slicer.slice(data))
 
-      found.should.eqls(data)
+      found.should.equal(data)
     })
   })
 })

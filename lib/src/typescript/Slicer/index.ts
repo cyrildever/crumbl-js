@@ -47,9 +47,6 @@ export const Slicer = (numberOfSlices: number, deltaMax: number): Slicer => ({
   slice: (data: string): [Slice, ...Array<Slice>] => {
     const fixedLength = Math.floor(data.length / numberOfSlices) + deltaMax
     const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
-    if (slices.length !== numberOfSlices) {
-      throw new Error('wrong number of slices')
-    }
     return slices as [Slice, ...Array<Slice>]
   },
   unslice: (slices: [Slice, ...Array<Slice>]): string =>
@@ -60,33 +57,40 @@ const split = (numberOfSlices: number, deltaMax: number, data: string): Array<st
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
     .map(mask => data.substring(mask.start, mask.end))
 
-//TODO we could initiazlied the masks array with an array of numberOfSlices element, which would grant a garantuee about the number of elements
 const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
-  const minLen = Math.max(averageSliceLength - Math.floor(deltaMax / 2), Math.floor(dataLength / (numberOfSlices + 1) + 1))
-  const maxLen = Math.min(averageSliceLength + Math.floor(deltaMax / 2), Math.ceil(dataLength / (numberOfSlices - 1) - 1))
-  const delta = Math.min(deltaMax, maxLen - minLen)
+  const fullLength = dataLength
   const masks = []
 
+  let catchUp = dataLength - averageSliceLength * numberOfSlices
   let length = 0
+  let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = Math.floor(rng() * (Math.min(maxLen, dataLength) + 1 - minLen) + minLen)
-    const b = Math.floor((dataLength - randomNum) / minLen)
-    const r = Math.floor((dataLength - randomNum) % minLen)
-
-    if (r <= b * delta) {
-      const m: Mask = {
-        start: length,
-        end: length + randomNum
-      }
-      masks.push(m)
-      length += randomNum
-      dataLength -= randomNum
+    const randomNum = rng() * deltaMax + catchUp / leftRound - (deltaMax + catchUp / leftRound) / 2
+    let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
+    // General rounding pb corrected at the end
+    if (leftRound == 1 && length + addedNum < fullLength) {
+      addedNum += fullLength - length - addedNum
     }
+    const m: Mask = {
+      start: length,
+      end: length + addedNum
+    }
+    masks.push(m)
+    catchUp = fullLength - length - averageSliceLength * leftRound
+    leftRound--
+    length += addedNum
+    dataLength -= addedNum
+  }
+  if (masks.length === 0) {
+    throw new Error('unable to build split masks')
+  }
+  if (masks.length != numberOfSlices) {
+    // If a seed behaves weirdly
+    return buildSplitMask(numberOfSlices, deltaMax, fullLength, (parseInt(seed) + 1).toString())
   }
   return masks
-
 }
 
 /**
@@ -98,7 +102,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * @returns the maximum gap between the length of slices
  */
 export const getDeltaMax = (dataLength: number, numberOfSlices: number): number => {
-  const sliceSize = dataLength / numberOfSlices
+  const sliceSize = Math.floor(dataLength / numberOfSlices)
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0
   }

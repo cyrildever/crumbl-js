@@ -71,7 +71,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
   let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = rng() * Math.round(deltaMax / 2) + Math.floor(catchUp / leftRound)
+    const randomNum = rng() * deltaMax / 2 + Math.floor(catchUp / leftRound)
     let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
     // General rounding pb corrected at the end
     if (leftRound == 1 && length + addedNum < fullLength) {

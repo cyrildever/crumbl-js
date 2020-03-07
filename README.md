@@ -46,19 +46,18 @@ All these steps could be done building an integrated app utilizing the [TypeScri
 ```console
 npm i crumbl-js
 ```
-_NB: The repository being still private, this kind of installation is not possible for now. See with our team on how to implement it._
 
-For example, the code below should display a new crumbl from the passed credential strings of the stakeholders:
+The code below should display a new crumbl from the passed credential strings of the stakeholders:
 ```javascript
 import { BrowserWorker, CREATION, ECIES_ALGORITHM, hash } from 'crumbl-js'
 
 function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
-    const source = document.getElementById('source').innerHTML;
-
+  const source = document.getElementById('source').innerHTML;
+  hash(source).then(hashedSource => {
     // Feed with the signers' credentials
     const owner = {
         encryptionAlgorithm: ECIES_ALGORITHM,
-        publicKey: Buffer.from(owner_pubkey, 'hex') // ECIES hexadecimal string
+        publicKey: Buffer.from(owner_pubkey, 'hex') // ECIES hexadecimal string representation of the decompressed public key
     };
     const trustee1 = {
         encryptionAlgorithm: ECIES_ALGORITHM,
@@ -72,16 +71,39 @@ function main(owner_pubkey, trustee1_pubkey, trustee2_pubkey) {
     const workerCreator = new BrowserWorker({
         mode: CREATION,
         data: [source],
-        verificationHash: hash(source),
+        verificationHash: hashedSource,
         htmlElement: document.getElementById('crumbled')
     });
     workerCreator.create([owner], [trustee1, trustee2]).then(crumbled => {
         // At this point, the crumbled value would have been assigned to the passed HTML element.
         // But you may want to do something else with it here.
         console.log(crumbled);
-    }
+    }):
+  });
 }
 ```
+
+Following the above situation, using the crumbled data and two "partial uncrumbs" gathered from the trusted signing third-parties, the code below shows how to recover the original source data as a data owner:
+```javascript
+const workerExtractor = new BrowserWorker({
+    mode: EXTRACTION,
+    data: [crumbled, partialUncrumb1, partialUncrumb2],
+    verificationHash: '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d',
+})
+workerExtractor.extract(owner, true).then(result => {
+  console.assert(result === source, 'Something wrong happened: are you sure you used the right items?');
+});
+```
+
+If the extracting stakeholder is not the data owner, the result would be a "partial uncrumb" to give to the data owner for processing the complete operation.
+For maximum security and sustainability, we recommend the involvement of at least three trusted signing third-parties in the process in addition to the data owner. Please [contact us](mailto:contact@edgewhere.fr) for a complete implementation.
+
+##### Dependencies #####
+
+This library relies on the following peer dependencies:
+* [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Edgewhere;
+* [`seedrandom.js`](https://www.npmjs.com/package/seedrandom).
+
 
 #### Go Library ####
 
@@ -95,7 +117,8 @@ You might also want to check out the Scala implementation for the Crumbl&trade;:
 
 ### License ###
 
-The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [EULA](LICENSE.md) terms for everyone. All technologies are protected by patents owned by Edgewhere SAS.
+The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [BSD-2-Clause-Patent License](LICENSE).
+All technologies are protected by patents owned by Edgewhere SAS.
 Please [contact us](mailto:contact@edgehere.fr) to get further information.
 
 

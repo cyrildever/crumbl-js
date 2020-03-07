@@ -1,6 +1,6 @@
 {
-  "name": "@edgewhere/crumbl-js",
-  "version": "2.1.1",
+  "name": "crumbl-js",
+  "version": "2.2.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -19,10 +19,11 @@
     "crumbl",
     "data protection",
     "secure storage",
-    "third-party"
+    "third-party",
+    "data masking"
   ],
-  "author": "Edgewhere <contact@edgewhere.fr>",
-  "license": "EULA",
+  "author": "Edgewhere <cdever@edgewhere.fr>",
+  "license": "BSD-2-Clause-Patent",
   "bugs": {
     "url": "https://github.com/edgewhere/crumbl-js/issues"
   },

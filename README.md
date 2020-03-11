@@ -4,7 +4,7 @@
 ![npm](https://img.shields.io/npm/dw/crumbl-js)
 ![GitHub last commit](https://img.shields.io/github/last-commit/edgewhere/crumbl-js)
 ![GitHub issues](https://img.shields.io/github/issues/edgewhere/crumbl-js)
-![GitHub](https://img.shields.io/github/license/edgewhere/crumbl-js)
+![NPM](https://img.shields.io/npm/l/crumbl-js)
 
 crumbl-js is a JavaScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
 

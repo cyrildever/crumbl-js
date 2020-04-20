@@ -1,6 +1,6 @@
 import { Crumbl, VERSION } from '../../core/Crumbl'
 import { CrumblMode, CREATION, EXTRACTION } from '..'
-import { hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH } from '../../crypto'
+import { hash, DEFAULT_HASH_ENGINE, DEFAULT_HASH_LENGTH } from '../../crypto'
 import { Signer } from '../../models/Signer'
 import { Uncrumb, PARTIAL_PREFIX, toUncrumb } from '../../Decrypter/Uncrumb'
 import { Uncrumbl } from '../../core/Uncrumbl'
@@ -82,9 +82,9 @@ export class BrowserWorker {
         if (parts[1] !== VERSION) {
           return Promise.reject(`wrong version for uncrumb: ${this.data[i]}`)
         }
-        const vh = parts[0].substr(0, DEFAUT_HASH_LENGTH)
+        const vh = parts[0].substr(0, DEFAULT_HASH_LENGTH)
         if (vh !== '' && vh === this.verificationHash) {
-          const us = parts[0].substr(DEFAUT_HASH_LENGTH)
+          const us = parts[0].substr(DEFAULT_HASH_LENGTH)
           const uncs = us.split(PARTIAL_PREFIX)
           for (let i = 0; i < uncs.length; i++) {
             const unc = uncs[i]
@@ -99,7 +99,7 @@ export class BrowserWorker {
 
     // Build returned result
     let result = ''
-    if(this.verificationHash === undefined)
+    if (this.verificationHash === undefined)
       throw new Error('verification hash cannot be empty')
 
     const uncrumbl = new Uncrumbl(this.data[0], uncrumbs, this.verificationHash, user, isOwner)

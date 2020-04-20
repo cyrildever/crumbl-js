@@ -1,5 +1,5 @@
 export const DEFAULT_HASH_ENGINE = 'sha-256'
-export const DEFAUT_HASH_LENGTH = 64
+export const DEFAULT_HASH_LENGTH = 64
 
 export const ECIES_ALGORITHM = 'ecies'
 export const RSA_ALGORITHM = 'rsa'

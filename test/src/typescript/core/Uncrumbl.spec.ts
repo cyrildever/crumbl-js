@@ -1,4 +1,4 @@
-import { hash, DEFAULT_HASH_ENGINE, DEFAUT_HASH_LENGTH, ECIES_ALGORITHM } from '../../../../lib/src/typescript/crypto'
+import { hash, DEFAULT_HASH_ENGINE, DEFAULT_HASH_LENGTH, ECIES_ALGORITHM } from '../../../../lib/src/typescript/crypto'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 import { Uncrumb, toUncrumb, PARTIAL_PREFIX } from '../../../../lib/src/typescript/Decrypter/Uncrumb'
 import { Uncrumbl } from '../../../../lib/src/typescript/core/Uncrumbl'
@@ -42,7 +42,7 @@ describe('Uncrumbl', () => {
       for (let i = 0; i < uncrumbs.length; i++) {
         const parts = uncrumbs[i].toString().split('.', 2)
         parts[1].should.equal(VERSION)
-        const us = parts[0].substr(DEFAUT_HASH_LENGTH)
+        const us = parts[0].substr(DEFAULT_HASH_LENGTH)
         const uncs = us.split(PARTIAL_PREFIX)
         for (let j = 0; j < uncs.length; j++) {
           const unc = uncs[j]

@@ -1,7 +1,7 @@
 import { Collector } from '../Decrypter/Collector'
 import { Crumb, toCrumb } from '../Encrypter/Crumb'
 import { decrypt } from '../Decrypter'
-import { DEFAUT_HASH_LENGTH, DEFAULT_HASH_ENGINE } from '../crypto'
+import { DEFAULT_HASH_LENGTH, DEFAULT_HASH_ENGINE } from '../crypto'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Uncrumb } from '../Decrypter/Uncrumb'
@@ -34,18 +34,14 @@ export class Uncrumbl {
 
   private async doUncrumbl(): Promise<Buffer> {
     // 1- Parse
-    const parts = this.crumbled.split('.', 2)
-    if (parts[1] !== VERSION) {
-      return Promise.reject(new Error('incompatible version: ' + parts[1]))
+    let crumbsStr = ''
+    try {
+      const [_, __, str] = extractData(this.crumbled, this.verificationHash) // eslint-disable-line @typescript-eslint/no-unused-vars
+      crumbsStr = str
+    } catch (e) {
+      return Promise.reject(e)
     }
-
-    const verificationHash = parts[0].substr(0, DEFAUT_HASH_LENGTH)
-    if (verificationHash !== this.verificationHash) {
-      return Promise.reject(new Error('incompatible input verification hash with crumbl'))
-    }
-
     const crumbs = new Array<Crumb>()
-    let crumbsStr = parts[0].substr(DEFAUT_HASH_LENGTH)
     while (crumbsStr.length > 0) {
       const nextLen = parseInt(crumbsStr.substr(2, 4), 16)
       const nextCrumb = crumbsStr.substr(0, nextLen + 6)
@@ -92,7 +88,7 @@ export class Uncrumbl {
     }
     if (hasAllCrumbs) {
       // Owner may recover fully-deciphered data
-      const collector = new Collector(uncrumbs, indexSet.size, verificationHash, DEFAULT_HASH_ENGINE)
+      const collector = new Collector(uncrumbs, indexSet.size, this.verificationHash, DEFAULT_HASH_ENGINE)
 
       // 5a- Deobfuscate
       const obfuscated = collector.toObfuscated()
@@ -113,9 +109,29 @@ export class Uncrumbl {
         }
       }
 
-      // 6b- Add verification hash prefix
-
-      return Buffer.from(verificationHash + partialUncrumbs + '.' + VERSION)
+      // 6b- Add verification hash prefix and version
+      return Buffer.from(this.verificationHash + partialUncrumbs + '.' + VERSION)
     }
   }
+}
+
+/**
+ * Split the crumbled string into its three parts: the version, the verification hash and the crumbs
+ * 
+ * @param crumbl {string} - The full crumbled string
+ * @param vh {string} - The optional verification hash to compare
+ * @returns the version, the hash byte array and the crumbs string
+ */
+export const extractData = (crumbl: string, vh?: string): [string, Buffer, string] => {
+  const parts = crumbl.split('.', 2)
+  if (parts[1] !== VERSION) {
+    throw new Error('incompatible version: ' + parts[1])
+  }
+
+  const verificationHash = parts[0].substr(0, DEFAULT_HASH_LENGTH)
+  if (vh !== undefined && verificationHash !== vh) {
+    throw new Error('incompatible input verification hash with crumbl')
+  }
+
+  return [parts[1], Buffer.from(verificationHash, 'hex'), parts[0].substr(DEFAULT_HASH_LENGTH)]
 }

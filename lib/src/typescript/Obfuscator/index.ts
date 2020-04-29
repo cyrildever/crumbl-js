@@ -11,21 +11,21 @@ export class Obfuscator {
   }
 
   /**
-     * Obfuscate the passed data
-     * 
-     * @param data the data to obfuscate
-     * @returns the byte array of the obfuscated result
-     */
+   * Obfuscate the passed data
+   * 
+   * @param {string} data - the data to obfuscate
+   * @returns the byte array of the obfuscated result
+   */
   apply(data: string): Buffer {
     return this.cipher.encrypt(data)
   }
 
   /**
-     * Deobfuscate the passed data
-     * 
-     * @param obfuscated the byte array to use
-     * @returns the deobfuscated string
-     */
+   * Deobfuscate the passed data
+   * 
+   * @param {Buffer} obfuscated - the byte array to use
+   * @returns the deobfuscated string
+   */
   unapply(obfuscated: Buffer): string {
     return this.cipher.decrypt(obfuscated)
   }

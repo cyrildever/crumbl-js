@@ -1,11 +1,11 @@
 import { Crumb } from '../Encrypter/Crumb'
 import { Dispatcher } from '../Encrypter/Dispatcher'
 import { encrypt } from '../Encrypter'
-import { hash, DEFAULT_HASH_ENGINE } from '../crypto'
-import { START_PADDING_CHARACTER } from '..'
+import { Hasher } from '../Hasher'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Slicer, MAX_SLICES, MIN_INPUT_SIZE, getDeltaMax } from '../Slicer'
+import { START_PADDING_CHARACTER } from '..'
 
 export const VERSION = '1' // TODO Change when necessary (change of hash algorithm, modification of string structure, etc.)
 
@@ -64,14 +64,15 @@ export class Crumbl {
     }
 
     // 4- Hash the source string
-    const hSrc = await hash(this.source, DEFAULT_HASH_ENGINE)
+    const hasher = new Hasher(crumbs)
+    const hashered = await hasher.apply(this.source)
 
     // 5- Finalize the output string
     const stringifiedCrumbs = new Array<string>()
     for (let i = 0; i < crumbs.length; i++) {
       stringifiedCrumbs.push(crumbs[i].toString())
     }
-    const crumbled = hSrc + stringifiedCrumbs.join('') + '.' + VERSION
+    const crumbled = hashered + stringifiedCrumbs.join('') + '.' + VERSION
 
     return crumbled
   }

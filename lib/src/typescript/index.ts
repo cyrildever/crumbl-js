@@ -28,6 +28,7 @@ export * from './core/Crumbl'
 export * from './core/Uncrumbl'
 export * from './Decrypter'
 export * from './Encrypter'
+export * from './Hasher'
 export * from './Obfuscator'
 export * from './Slicer'
 
@@ -49,4 +50,21 @@ export const unpad = (str: string): string => {
     str = str.substr(0, str.length - 1)
   }
   return str
+}
+
+/**
+ * Compute the euclidean division of the passed integers
+ * 
+ * @param {number} numerator - the numerator integer
+ * @param {number} denominator - the denominator integer
+ * @returns a tuple of (quotient, remainder) integers
+ * @throws division by zero
+ */
+export const euclideanDivision = (numerator: number, denominator: number): [number, number] => {
+  if (denominator === 0) {
+    throw new Error('division by zero')
+  }
+  const quotient = Math.floor(numerator / denominator)
+  const remainder = numerator % denominator
+  return [quotient, remainder]
 }

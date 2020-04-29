@@ -82,16 +82,13 @@ export class BrowserWorker {
         if (parts[1] !== VERSION) {
           return Promise.reject(`wrong version for uncrumb: ${this.data[i]}`)
         }
-        const vh = parts[0].substr(0, DEFAULT_HASH_LENGTH)
-        if (vh !== '' && vh === this.verificationHash) {
-          const us = parts[0].substr(DEFAULT_HASH_LENGTH)
-          const uncs = us.split(PARTIAL_PREFIX)
-          for (let i = 0; i < uncs.length; i++) {
-            const unc = uncs[i]
-            if (unc !== '') {
-              const uncrumb = toUncrumb(unc)
-              uncrumbs.push(uncrumb)
-            }
+        const us = parts[0].substr(DEFAULT_HASH_LENGTH)
+        const uncs = us.split(PARTIAL_PREFIX)
+        for (let i = 0; i < uncs.length; i++) {
+          const unc = uncs[i]
+          if (unc !== '') {
+            const uncrumb = toUncrumb(unc)
+            uncrumbs.push(uncrumb)
           }
         }
       }

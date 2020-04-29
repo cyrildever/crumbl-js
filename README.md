@@ -102,6 +102,7 @@ For maximum security and sustainability, we recommend the involvement of at leas
 
 This library relies on the following peer dependencies:
 * [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Edgewhere;
+* [`buffer-xor`](https://www.npmjs.com/package/buffer-xor);
 * [`seedrandom.js`](https://www.npmjs.com/package/seedrandom).
 
 

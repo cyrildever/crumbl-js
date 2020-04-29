@@ -1,4 +1,6 @@
-import { BrowserWorker, CREATION, ECIES_ALGORITHM } from '../../../lib/src/typescript'
+import { BrowserWorker, CREATION, ECIES_ALGORITHM, euclideanDivision } from '../../../lib/src/typescript'
+
+declare function expect(val: any, message?: string): any
 
 describe('lib', () => {
   it('should create several times in a row', async () => {
@@ -14,21 +16,34 @@ describe('lib', () => {
       privateKey: Buffer.from('80219e4d24caf16cb4755c1ae85bad02b6a3efb1e3233379af6f2cc1a18442c4', 'hex')
     }
     /* eslint-disable @typescript-eslint/no-unused-vars */
-    const done1 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done2 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done3 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done4 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done5 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done6 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done7 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done8 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done9 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done10 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done11 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done13 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
-    const done14 = await new BrowserWorker({mode: CREATION, data: [data]}).create([owner], [trustee1])
+    const done1 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done2 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done3 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done4 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done5 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done6 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done7 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done8 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done9 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done10 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done11 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done13 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
+    const done14 = await new BrowserWorker({ mode: CREATION, data: [data] }).create([owner], [trustee1])
     /* eslint-enable @typescript-eslint/no-unused-vars */
-    
+
     return true
+  })
+})
+
+describe('euclideanDivision', () => {
+  it('should return the appropriate quotient and remainder', () => {
+    const numerator = 15
+    const denominator = 2
+    const [quotient, remainder] = euclideanDivision(numerator, denominator)
+    quotient.should.equal(7)
+    remainder.should.equal(1)
+  })
+  it('should throw an error when dividing by zero', () => {
+    expect(() => euclideanDivision(23, 0)).to.throw('division by zero')
   })
 })

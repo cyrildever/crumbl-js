@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "2.2.2",
+  "version": "3.0.1",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/edgewhere/crumbl-js#readme",
   "devDependencies": {
+    "@types/buffer-xor": "^2.0.0",
     "@types/chai": "^4.2.9",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.36",
@@ -36,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
     "browserify": "^16.5.0",
+    "buffer-xor": "^2.0.2",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "ecies-geth": "^1.0.5",
@@ -50,6 +52,7 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
+    "buffer-xor": "^2.0.2",
     "ecies-geth": "^1.0.5",
     "feistel-cipher": "^1.0.3",
     "seedrandom": "^3.0.5"

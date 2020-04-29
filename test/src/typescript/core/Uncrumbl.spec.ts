@@ -13,7 +13,7 @@ describe('Uncrumbl', () => {
     // Equivalent to 'crumble-exe/core/uncrumbl_test.go' tests
     it('should uncrumbl appropriately', async () => {
       const expected = 'cdever@edgewhere.fr'
-      const crumbled = '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d0000a8BPpstHEnG5wfyP6/wt+cJ57+MnM8LCqZmLWZk2m/Lyorl4fVVrwAEj/nG/i/scyoNn/q2NGYjO0Xw1Opcf7XfIqTqq2F+3CXHmu6HXoHDNT1Dh4CJMtKbATXqJT/vaR/QkQ6Gi82aZrT4ycS8HL+tyR4HiIJ5pFQIzMsfw==0100a8BCI8kfWbdcOHBm4kk/fzFtFfIdBZH4HwQmoTabos8AVkYP1k95VtOc0wmyfyIA8hzWdwViDVLLKcKxe1m6Wk3YSQvOQzpN/6EJlx2YPcQ9FzqX5SNDbbMuRts2ZBp4MM7B38UV1phy176pSgFcYwX3wGCuU7cxr8vdWbhQ==0200a8BOfHBiayOHXV9QOCS7dgG3XTic3LPbGts0BdUW45OeQ+8u2AbTM2qeuBtcmUxVfUXCZngcYUSjDRrvaBB6KSuqzm1WKECIrbTN6wRITqFIUj7MczIFwVDZEc3iBUHW6N7/8Y+3z/geq16dpQmOj70JsCE1hMfwAMeA/4Ug==.1'
+      const crumbled = '580fb8a91f05833200dea7d33536aaec99e56da492685aac67505a2e91e6f7040000a8BJmGgfjwAkIPs2rPt1y3mRZzx+f/o/cs7IBhaRb0SyxwsHvL1SKx+yH4HQU6ZK30h1Dtbwpx0HkIEqjfg4gWmFqNOQTHm4Ry+XdN6Aucrt0CpHPCSNc8mA0sQa9STKM89M4XQ46Mf1AJ8oWpyV5AvmmM7SULvJA8oS7UXwE=0100a8BEq0u3vV/c/wS2IrN2ph+HLAGG8AHk8o5tlOCJ8osXDWaej+0DeksO78Y0dVilcIDnHQv7P5Rhpcj+N8dHSrul5s1aRkSuu4nSY6bk9Tev4mCKWRFVpwUWaPBPPxK+j/hgCk4/hDPUU2bV/egmyKTOJijuNS/ebEmwTpUXU=0200a8BEGzuG7r4DZ3DHW6g851iAL3Vf+L4GV/8kQdDHrVdFJn/zhkrD7AM2LS+BmJ9dl3M3omMwuG+RDtzbjfRo7Lfpa3WgQBWARgHgpCzJIO8DCbEDLP0u4BcHOQtxW1cGu/ChSMCx/VhaIxj8TWQ7AdonjCUWxMtI39KerQUHk=.1'
 
       const verificationHash = await hash(expected, DEFAULT_HASH_ENGINE)
 
@@ -25,7 +25,7 @@ describe('Uncrumbl', () => {
       }
       const uTrustee1 = new Uncrumbl(crumbled, [], '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d', trustee1, false)
       const uncrumb1 = await uTrustee1.process()
-      uncrumb1.toString().should.equal('580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%01AgICBFUDDk4PXEc=.1') // This shall be returned by the trustee
+      uncrumb1.toString().should.equal('580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%01AgICBFUDDk4PXEcJ.1') // This shall be returned by the trustee
       uncrumbs.push(uncrumb1)
 
       const trustee3: Signer = {
@@ -34,7 +34,7 @@ describe('Uncrumbl', () => {
       }
       const uTrustee3 = new Uncrumbl(crumbled, [], '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d', trustee3, false)
       const uncrumb2 = await uTrustee3.process()
-      uncrumb2.toString().should.equal('580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%02AgICAgICAgkYUkI=.1') // This shall be returned by the trustee
+      uncrumb2.toString().should.equal('580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%02AgICAgICAgICGFJC.1') // This shall be returned by the trustee
       uncrumbs.push(uncrumb2)
 
       // 2- As an owner
@@ -63,14 +63,14 @@ describe('Uncrumbl', () => {
       found.toString().should.equal(expected)
     })
     it('should work as one out of three trustees', async () => {
-      const expected = 'c530a35b731dfb63800daded95bd7a20edfd7a4a07898604e42d1829ef5f8e76%02AgICAgJYQVtVU0Q=%03AgICAgICAgICXkE=.1'
-      const crumbled = 'c530a35b731dfb63800daded95bd7a20edfd7a4a07898604e42d1829ef5f8e760000a8BIYN/p+IDv3+M2hIStrbxe37yde6HSIrBpI1RE7s5CyJcRmXUlXeCIHeNOqJ54KviUWsO4F5lNlSgjEeXPOD6xawv4gsaBmIS+SgJ32OMoydvg4HsfN1wj0FFzZgoAzpP3ctdufD7nQ+6ePJ4aY3tTT3R00kiBOK0IgqHg==0100a8BCfGiIykusKufdcO7mVZyhb2pYgLH/WMFQWhy1NEWmo066Y4stkCmypUdZNjskT/Het8eStApmMbBoUnhlRFP4GFByhgdo02l20aBlJXhd/eUzf5tEcoUw7BvX0fl6BAFpsAFwIPPIWhCIqmfLqg0xnwl9kb8tkoQJD5pQ==0100a8BGmyq+yTEuEPQisPYpcl01TGachpTcS6P9cXF9CJ8b4qjOrcClpIypwQwyhDzRwpTj5kQRB9JTEsVEZa7BrjSzNkohxHCRzYCJeGNGAiO+DFaPGKtsl85XHAUmyYNNR5XQw7QBpDBSuq/PHmW11hXRTX11BVc2Y96qHmJg==0200a8BPHpBE7lk4BkDLHa5UAokjiatF+nGUkSsiBt2IPHVYJsAfkN+VEYZLZwb6GRHRzmsXgJHbs0mvv9O7kPek0q5ApuS8xfqgbVC8YjVzsxjh5h2uVU9j8cyG5khc+/d8jzG2zIbHw0BbYWqPqfIj95HqHFKWCYdbc7C3h2Cw==0200a8BC/wtxAi+4NF+DD9KnBgRJ5i/OqPbR9cdTl88IG7nZt9MX8gdVCmquiFDYLxGYKiJQigOnCsoOYu058GnqvAKAmtjcCCXxvK1kNnGeXr2gXr6EWMT0DglhzRt/ewyf0q3jvCkCWdR4L/2hGwjtbtvpRaDJAaMYp6kJj3Sw==0300a8BDhSu2Pzpvyb8fy7c6qTYw6L4vWwriPuelwUDN1lrWekxnVMlpRovnC3e1OH0F7HBeN1/4ppZOIEE0E0rg25/CfnS2/rn8fKi92fKXTbEZqdTkTdzrFhiqJgnIcmbpMe1+ecG1mlT+oajGLLMs4SRjoAZDTwqHYWMFe5Yg==0300a8BIAtorVol8KW6XWM9mycS62+GmnOkEj1e9znhW0RnXsPECBDO9SvDoWHCecBW4P3vU7oa24GCJRLAjeCfkpCzVewhCTkYQDYb9C/uUanDblEmazM/hDKiwjeKVaf/JiOtvDdnMJPsrxpXNf6d9wDFjD2/a4q4O82a5m3nQ==.1'
+      const expected = '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d%01AgICBFUDDk4PXEcJ.1'
+      const crumbled = '580fb8a91f05833200dea7d33536aaec99e56da492685aac67505a2e91e6f7040000a8BJmGgfjwAkIPs2rPt1y3mRZzx+f/o/cs7IBhaRb0SyxwsHvL1SKx+yH4HQU6ZK30h1Dtbwpx0HkIEqjfg4gWmFqNOQTHm4Ry+XdN6Aucrt0CpHPCSNc8mA0sQa9STKM89M4XQ46Mf1AJ8oWpyV5AvmmM7SULvJA8oS7UXwE=0100a8BEq0u3vV/c/wS2IrN2ph+HLAGG8AHk8o5tlOCJ8osXDWaej+0DeksO78Y0dVilcIDnHQv7P5Rhpcj+N8dHSrul5s1aRkSuu4nSY6bk9Tev4mCKWRFVpwUWaPBPPxK+j/hgCk4/hDPUU2bV/egmyKTOJijuNS/ebEmwTpUXU=0200a8BEGzuG7r4DZ3DHW6g851iAL3Vf+L4GV/8kQdDHrVdFJn/zhkrD7AM2LS+BmJ9dl3M3omMwuG+RDtzbjfRo7Lfpa3WgQBWARgHgpCzJIO8DCbEDLP0u4BcHOQtxW1cGu/ChSMCx/VhaIxj8TWQ7AdonjCUWxMtI39KerQUHk=.1'
 
       const trustee1: Signer = {
         encryptionAlgorithm: ECIES_ALGORITHM,
-        privateKey: Buffer.from('abeb02ac3e5a162314341eb801d652a394b23a48e93cbb1213ce9a85c1a91404', 'hex')
+        privateKey: Buffer.from('80219e4d24caf16cb4755c1ae85bad02b6a3efb1e3233379af6f2cc1a18442c4', 'hex')
       }
-      const uTrustee1 = new Uncrumbl(crumbled, [], 'c530a35b731dfb63800daded95bd7a20edfd7a4a07898604e42d1829ef5f8e76', trustee1, false)
+      const uTrustee1 = new Uncrumbl(crumbled, [], '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d', trustee1, false)
       const uncrumb1 = await uTrustee1.process()
       uncrumb1.toString().should.equal(expected)
     })

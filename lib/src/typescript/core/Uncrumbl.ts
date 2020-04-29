@@ -6,6 +6,7 @@ import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Uncrumb } from '../Decrypter/Uncrumb'
 import { VERSION } from './Crumbl'
+import { Hasher } from '../Hasher'
 
 export class Uncrumbl {
   crumbled: string
@@ -34,10 +35,12 @@ export class Uncrumbl {
 
   private async doUncrumbl(): Promise<Buffer> {
     // 1- Parse
+    let hasheredSrc = ''
     let crumbsStr = ''
     try {
-      const [_, __, str] = extractData(this.crumbled, this.verificationHash) // eslint-disable-line @typescript-eslint/no-unused-vars
+      const [_, hashered, str] = extractData(this.crumbled) // eslint-disable-line @typescript-eslint/no-unused-vars
       crumbsStr = str
+      hasheredSrc = hashered
     } catch (e) {
       return Promise.reject(e)
     }
@@ -48,6 +51,12 @@ export class Uncrumbl {
       const crumb = toCrumb(nextCrumb)
       crumbs.push(crumb)
       crumbsStr = crumbsStr.substr(nextLen + 6)
+    }
+    // Verify hashered prefix
+    const hasher = new Hasher(crumbs)
+    const vh = hasher.unapply(hasheredSrc)
+    if (vh !== this.verificationHash) {
+      return Promise.reject(new Error('incompatible input verification hash with crumbl'))
     }
 
     // 2- Decrypt crumbs
@@ -118,20 +127,25 @@ export class Uncrumbl {
 /**
  * Split the crumbled string into its three parts: the version, the verification hash and the crumbs
  * 
- * @param crumbl {string} - The full crumbled string
- * @param vh {string} - The optional verification hash to compare
- * @returns the version, the hash byte array and the crumbs string
+ * @param {string} crumbl - The full crumbled string
+ * @param {Crumb[]} crumbs - The list of crumbs [optional]
+ * @param {string} vh - The optional verification hash to compare [optional]
+ * @returns the version, the hashered and the crumbs strings
  */
-export const extractData = (crumbl: string, vh?: string): [string, Buffer, string] => {
+export const extractData = (crumbl: string, crumbs?: ReadonlyArray<Crumb>, vh?: string): [string, string, string] => {
   const parts = crumbl.split('.', 2)
   if (parts[1] !== VERSION) {
     throw new Error('incompatible version: ' + parts[1])
   }
 
-  const verificationHash = parts[0].substr(0, DEFAULT_HASH_LENGTH)
-  if (vh !== undefined && verificationHash !== vh) {
-    throw new Error('incompatible input verification hash with crumbl')
+  const hasheredSrc = parts[0].substr(0, DEFAULT_HASH_LENGTH)
+  if (crumbs !== undefined && crumbs.length > 0) {
+    const hasher = new Hasher(crumbs)
+    const hSrc = hasher.unapply(hasheredSrc)
+    if (vh !== undefined && hSrc !== vh) {
+      throw new Error('incompatible input verification hash with crumbl')
+    }
   }
 
-  return [parts[1], Buffer.from(verificationHash, 'hex'), parts[0].substr(DEFAULT_HASH_LENGTH)]
+  return [parts[1], hasheredSrc, parts[0].substr(DEFAULT_HASH_LENGTH)]
 }

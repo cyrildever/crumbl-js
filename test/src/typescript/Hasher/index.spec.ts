@@ -10,7 +10,6 @@ describe('Hasher', () => {
       const source = 'data to hash'
       const hasher = new Hasher(crumbs)
       const hashered = await hasher.apply(source)
-      console.log('hashered', hashered)
       hashered.should.equal(expected)
     })
   })

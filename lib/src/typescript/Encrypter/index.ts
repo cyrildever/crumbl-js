@@ -24,3 +24,6 @@ export const encrypt = async (data: Slice, index: number, s: Signer): Promise<Cr
   const b64 = new Base64(crypted)
   return new Crumb(b64, index, b64.length())
 }
+
+export * from './Crumb'
+export * from './Dispatcher'

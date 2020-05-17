@@ -23,12 +23,12 @@ export class Uncrumb {
 }
 
 export const toUncrumb = (unparsed: string): Uncrumb => {
-  const [index, deciphered] = parse(unparsed)
+  const [index, deciphered] = parseUncrumb(unparsed)
   const u = new Uncrumb(new Base64(deciphered), index)
   return u
 }
 
-export const parse = (unparsed: string): [number, string] => {
+export const parseUncrumb = (unparsed: string): [number, string] => {
   if (unparsed.startsWith(PARTIAL_PREFIX)) {
     unparsed = unparsed.substr(1)
   }

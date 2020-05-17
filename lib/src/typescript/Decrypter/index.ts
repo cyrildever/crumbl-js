@@ -21,3 +21,6 @@ export const decrypt = async (c: Crumb, s: Signer): Promise<Uncrumb> => {
   }
   return new Uncrumb(new Base64(decrypted), c.index)
 }
+
+export * from './Collector'
+export * from './Uncrumb'

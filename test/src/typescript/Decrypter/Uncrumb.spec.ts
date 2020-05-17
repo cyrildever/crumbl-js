@@ -1,13 +1,13 @@
 import { Base64 } from '../../../../lib/src/typescript/models/Base64'
 import { Slice } from '../../../../lib/src/typescript/Slicer'
-import { Uncrumb, parse, toUncrumb } from '../../../../lib/src/typescript/Decrypter/Uncrumb'
+import { Uncrumb, parseUncrumb, toUncrumb } from '../../../../lib/src/typescript/Decrypter/Uncrumb'
 
 describe('Uncrumb', () => {
   // Equivalent to 'crumbl-exe/decrypter/uncrumb_test.go' tests
   describe('parse', () => {
     it('should be deterministic', () => {
       const uncrumbStr = '%01RWRnZXdoZXJl'
-      const parts = parse(uncrumbStr)
+      const parts = parseUncrumb(uncrumbStr)
       parts[0].should.equal(1)
       parts[1].should.equal('RWRnZXdoZXJl')
 

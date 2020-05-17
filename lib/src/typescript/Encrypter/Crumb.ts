@@ -26,12 +26,12 @@ export class Crumb {
 }
 
 export const toCrumb = (unparsed: string): Crumb => {
-  const parsed = parse(unparsed)
+  const parsed = parseCrumb(unparsed)
   const c = new Crumb(new Base64(parsed[2]), parsed[0], parsed[1])
   return c
 }
 
-export const parse = (unparsed: string): [number, number, string] => {
+export const parseCrumb = (unparsed: string): [number, number, string] => {
   const idxHex = unparsed.substr(0, 2)
   const idx = parseInt(idxHex, 16)
   const lnHex = unparsed.substr(2, 4)

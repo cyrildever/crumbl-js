@@ -121,3 +121,5 @@ export const getDeltaMax = (dataLength: number, numberOfSlices: number): Delta =
   }
   return deltaMax as Delta
 }
+
+export * from './Seed'

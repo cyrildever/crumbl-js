@@ -36,7 +36,7 @@ export class Hasher {
     if (sortedOwnerCrumbs.length < 1) {
       throw new Error('owner\'s crumbs not present')
     }
-    const concat = Buffer.from(sortedOwnerCrumbs.join(''), 'base64')
+    const concat = Buffer.concat(sortedOwnerCrumbs.map(c => Buffer.from(c, 'base64')))
     const mask = buildMask(concat, NUMBER_OF_CHARACTERS / 2)
     const xored = xor(lastBytes, mask)
     const xoredHex = xored.toString('hex')
@@ -59,7 +59,7 @@ export class Hasher {
     if (sortedOwnerCrumbs.length < 1) {
       throw new Error('owner\'s crumbs not present')
     }
-    const concat = Buffer.from(sortedOwnerCrumbs.join(''), 'base64')
+    const concat = Buffer.concat(sortedOwnerCrumbs.map(c => Buffer.from(c, 'base64')))
     const mask = buildMask(concat, NUMBER_OF_CHARACTERS / 2)
     const lastBytes = xor(xored, mask)
     return hashered.substring(0, hashered.length - NUMBER_OF_CHARACTERS) + lastBytes.toString('hex')

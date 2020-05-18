@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/edgewhere/crumbl-js#readme",
   "devDependencies": {
-    "@types/buffer-xor": "^2.0.0",
+    "@types/buffer-xor": "~2.0.0",
     "@types/chai": "^4.2.9",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.36",
@@ -39,22 +39,22 @@
     "@typescript-eslint/eslint-plugin": "2.28.0",
     "@typescript-eslint/parser": "2.28.0",
     "browserify": "^16.5.0",
-    "buffer-xor": "^2.0.2",
+    "buffer-xor": "~2.0.2",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "ecies-geth": "^1.1.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-no-loops": "0.3.0",
-    "eslint-plugin-react": "7.18.3",
+    "eslint-plugin-no-loops": "~0.3.0",
+    "eslint-plugin-react": "~7.18.3",
     "feistel-cipher": "^1.0.3",
     "live-server": "^1.2.1",
     "mocha": "^6.2.2",
     "seedrandom": "3.0.5",
     "ts-node": "^8.6.2",
-    "typescript": "3.8.3"
+    "typescript": "~3.8.3"
   },
   "peerDependencies": {
-    "buffer-xor": "^2.0.2",
+    "buffer-xor": "~2.0.2",
     "ecies-geth": "^1.1.0",
     "feistel-cipher": "^1.0.3",
     "seedrandom": "3.0.5"

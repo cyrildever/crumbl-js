@@ -35,27 +35,16 @@ export class Uncrumbl {
 
   private async doUncrumbl(): Promise<Buffer> {
     // 1- Parse
-    let hasheredSrc = ''
-    let crumbsStr = ''
+    let crumbs = new Array<Crumb>()
+    let verificationHash = ''
     try {
-      const [_, hashered, str] = extractData(this.crumbled) // eslint-disable-line @typescript-eslint/no-unused-vars
-      crumbsStr = str
-      hasheredSrc = hashered
+      const [vh, crms] = extractData(this.crumbled)
+      crumbs = crms
+      verificationHash = vh
     } catch (e) {
       return Promise.reject(e)
     }
-    const crumbs = new Array<Crumb>()
-    while (crumbsStr.length > 0) {
-      const nextLen = parseInt(crumbsStr.substr(2, 4), 16)
-      const nextCrumb = crumbsStr.substr(0, nextLen + 6)
-      const crumb = toCrumb(nextCrumb)
-      crumbs.push(crumb)
-      crumbsStr = crumbsStr.substr(nextLen + 6)
-    }
-    // Verify hashered prefix
-    const hasher = new Hasher(crumbs)
-    const vh = hasher.unapply(hasheredSrc)
-    if (vh !== this.verificationHash) {
+    if (verificationHash === '' || verificationHash !== this.verificationHash) {
       return Promise.reject(new Error('incompatible input verification hash with crumbl'))
     }
 
@@ -102,12 +91,15 @@ export class Uncrumbl {
       // 5a- Deobfuscate
       const obfuscated = collector.toObfuscated()
       const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
-      const deobfuscated = obfuscator.unapply(obfuscated)
+      const deobfuscated = await obfuscator.unapply(obfuscated, this.verificationHash)
+      if (deobfuscated === '') {
+        return Promise.reject(new Error('unable to deobfuscate'))
+      }
 
-      return collector.check(Buffer.from(deobfuscated))
-        .then(isCheck => isCheck ? Promise.resolve(Buffer.from(deobfuscated)) : Promise.reject(new Error('source has not checked verification hash')))
+      return collector.check(Buffer.from(deobfuscated)) // TODO Get rid of it if we keep the verificationHash check in deobfuscation
+        .then(isChecked => isChecked ? Promise.resolve(Buffer.from(deobfuscated)) : Promise.reject(new Error('source has not checked verification hash')))
     } else {
-      // Trustee only could return his own uncrumbs
+      // Trustee could only return his own uncrumbs
 
       // 5b- Build partial uncrumbs
       let partialUncrumbs = ''
@@ -125,27 +117,30 @@ export class Uncrumbl {
 }
 
 /**
- * Split the crumbled string into its three parts: the version, the verification hash and the crumbs
+ * Extract the verification hash and the crumbs from the passed crumbled string
  * 
  * @param {string} crumbl - The full crumbled string
- * @param {Crumb[]} crumbs - The list of crumbs [optional]
- * @param {string} vh - The optional verification hash to compare [optional]
- * @returns the version, the hashered and the crumbs strings
+ * @returns the verification hash and the array of crumbs
  */
-export const extractData = (crumbl: string, crumbs?: ReadonlyArray<Crumb>, vh?: string): [string, string, string] => {
-  const parts = crumbl.split('.', 2)
+export const extractData = (crumbled: string): [string, Array<Crumb>] => {
+  const parts = crumbled.split('.', 2)
   if (parts[1] !== VERSION) {
     throw new Error('incompatible version: ' + parts[1])
   }
 
-  const hasheredSrc = parts[0].substr(0, DEFAULT_HASH_LENGTH)
-  if (crumbs !== undefined && crumbs.length > 0) {
-    const hasher = new Hasher(crumbs)
-    const hSrc = hasher.unapply(hasheredSrc)
-    if (vh !== undefined && hSrc !== vh) {
-      throw new Error('incompatible input verification hash with crumbl')
-    }
+  let crumbsStr = parts[0].substr(DEFAULT_HASH_LENGTH)
+  const crumbs = new Array<Crumb>()
+  while (crumbsStr.length > 0) {
+    const nextLen = parseInt(crumbsStr.substr(2, 4), 16)
+    const nextCrumb = crumbsStr.substr(0, nextLen + 6)
+    const crumb = toCrumb(nextCrumb)
+    crumbs.push(crumb)
+    crumbsStr = crumbsStr.substr(nextLen + 6)
   }
+    
+  const hasheredSrc = parts[0].substr(0, DEFAULT_HASH_LENGTH)
+  const hasher = new Hasher(crumbs)
+  const vh = hasher.unapply(hasheredSrc)
 
-  return [parts[1], hasheredSrc, parts[0].substr(DEFAULT_HASH_LENGTH)]
+  return [vh, crumbs]
 }

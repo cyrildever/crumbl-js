@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -9,7 +9,7 @@
     "fix": "eslint lib --ext .ts --fix",
     "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=9001 --mount=/:test/src",
     "fix-test": "eslint test --ext .ts --fix",
-    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/Hasher/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
+    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,12 @@
     "url": "https://github.com/edgewhere/crumbl-js/issues"
   },
   "homepage": "https://github.com/edgewhere/crumbl-js#readme",
+  "peerDependencies": {
+    "buffer-xor": "~2.0.2",
+    "ecies-geth": "^1.1.0",
+    "feistel-cipher": "^1.0.3",
+    "seedrandom": "3.0.5"
+  },
   "devDependencies": {
     "@types/buffer-xor": "~2.0.0",
     "@types/chai": "^4.2.9",
@@ -52,11 +58,5 @@
     "seedrandom": "3.0.5",
     "ts-node": "^8.6.2",
     "typescript": "~3.8.3"
-  },
-  "peerDependencies": {
-    "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.1.0",
-    "feistel-cipher": "^1.0.3",
-    "seedrandom": "3.0.5"
   }
 }

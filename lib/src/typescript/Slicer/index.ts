@@ -67,6 +67,7 @@ const split = (numberOfSlices: number, deltaMax: number, data: string): Array<st
 
 const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
+  const dm = Math.min(deltaMax, averageSliceLength - 1)
   const fullLength = dataLength
   const masks = []
 
@@ -75,7 +76,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
   let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = rng() * deltaMax / 2 + Math.floor(catchUp / leftRound)
+    const randomNum = rng() * dm / 2 + Math.floor(catchUp / leftRound)
     let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
     // General rounding pb corrected at the end
     if (leftRound == 1 && length + addedNum < fullLength) {

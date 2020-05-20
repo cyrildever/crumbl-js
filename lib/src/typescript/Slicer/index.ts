@@ -2,7 +2,7 @@ import seedrandom from 'seedrandom'
 
 import { seedFor } from './Seed'
 
-import { unpad, START_PADDING_CHARACTER } from '..'
+import { Padder } from '../Padder'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5
@@ -45,6 +45,8 @@ interface Slicer {
  * It could be generated using `getDeltaMax` or be your specific choice.
  */
 export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => {
+  const padder = new Padder()
+
   if(numberOfSlices <= 0)
     throw new Error(`number of slices too small: ${numberOfSlices}`)
   return {
@@ -53,11 +55,11 @@ export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => {
         throw new Error('unsupported empty data')
       
       const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
-      const slices = split(numberOfSlices, deltaMax, data).map(split => split.padStart(fixedLength, START_PADDING_CHARACTER))
+      const slices = split(numberOfSlices, deltaMax, data).map(split => padder.apply(split, fixedLength))
       return slices as [Slice, ...Array<Slice>]
     },
     unslice: (slices: [Slice, ...Array<Slice>]): string =>
-      slices.map(unpad).join('')
+      slices.map(padder.unapply).join('') // eslint-disable-line @typescript-eslint/unbound-method
   }
 }
 

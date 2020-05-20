@@ -47,18 +47,18 @@ describe('Slicer', () => {
         }
       }).to.not.throw()
     })
-    it('should behave the same as the go implementation', () => {
+    it('should behave the same as the Go implementation', () => {
       const slicer = Slicer(4, 2)
       const slices = slicer.slice('111111111222222222333333333444444444')
 
-      slices[3].should.eqls('\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
+      slices[3].should.eqls('\u0002\u0002\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
     })
   })
   describe('unslice', () => {
     it('should be deterministic', () => {
       const slicer = Slicer(4, 0)
-      const found1 = slicer.unslice(['11111', '22222', '33333', '44444'])
-      const found2 = slicer.unslice(['11111', '22222', '33333', '44444'])
+      const found1 = slicer.unslice(['\u0002\u000211111', '\u0002\u000222222', '\u0002\u000233333', '\u0002\u000244444'])
+      const found2 = slicer.unslice(['\u0002\u000211111', '\u0002\u000222222', '\u0002\u000233333', '\u0002\u000244444'])
       
       found1.should.eqls(found2) // '11111222223333344444'
     })

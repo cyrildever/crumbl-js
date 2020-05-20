@@ -1,4 +1,4 @@
-import { START_PADDING_CHARACTER } from ".."
+import { START_PADDING_CHARACTER } from '..'
 
 // The minimum number of prepended characters in the padded result
 export const PREPEND_SIZE = 2
@@ -100,7 +100,7 @@ export class Padder {
 
     // 3 - Do unpad
     let unpadded = padded
-    while (unpadded.length > 0 && unpadded[0] === pc) {
+    while (unpadded.length > 0 && unpadded.startsWith(pc)) {
       unpadded = unpadded.substring(1)
     }
     if (unpadded.length === 0) {

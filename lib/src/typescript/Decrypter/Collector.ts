@@ -1,6 +1,6 @@
 import { hash } from '../crypto/index'
 import { Uncrumb } from './Uncrumb'
-import { unpad } from '..'
+import { Padder } from '../Padder'
 
 export class Collector {
   map: Map<number, Uncrumb>
@@ -8,11 +8,15 @@ export class Collector {
   verificationHash: string
   hashEngine: string
 
+  private padder: Padder
+
   constructor(map: Map<number, Uncrumb>, numberOfSlices: number, verificationHash: string, hashEngine: string) {
     this.map = map
     this.numberOfSlices = numberOfSlices
     this.verificationHash = verificationHash
     this.hashEngine = hashEngine
+
+    this.padder = new Padder()
   }
 
   /**
@@ -35,7 +39,7 @@ export class Collector {
       if (uncrumb === undefined) {
         throw new Error(`missing slice with index: ${i}`)
       }
-      o += unpad(uncrumb.toSlice())
+      o += this.padder.unapply(uncrumb.toSlice())
     }
     return Buffer.from(o)
   }

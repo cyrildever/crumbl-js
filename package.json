@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -9,7 +9,7 @@
     "fix": "eslint lib --ext .ts --fix",
     "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=9001 --mount=/:test/src",
     "fix-test": "eslint test --ext .ts --fix",
-    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
+    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/Padder/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
   },
   "repository": {
     "type": "git",

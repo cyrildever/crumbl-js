@@ -30,6 +30,7 @@ export * from './Decrypter'
 export * from './Encrypter'
 export * from './Hasher'
 export * from './Obfuscator'
+export * from './Padder'
 export * from './Slicer'
 
 export * from './crypto'

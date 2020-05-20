@@ -4,8 +4,8 @@ import { encrypt } from '../Encrypter'
 import { Hasher } from '../Hasher'
 import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
-import { Slicer, MAX_SLICES, MIN_INPUT_SIZE, getDeltaMax } from '../Slicer'
-import { START_PADDING_CHARACTER } from '..'
+import { Slicer, MAX_SLICES, getDeltaMax } from '../Slicer'
+import { Padder } from '../Padder'
 
 export const VERSION = '1' // TODO Change when necessary (change of hash algorithm, modification of string structure, etc.)
 
@@ -15,11 +15,14 @@ export class Crumbl {
   owners: [Signer, ...Array<Signer>]
   trustees: [Signer, ...Array<Signer>]
 
+  private padder: Padder
+
   constructor(source: string, hashEngine: string, owners: [Signer, ...Array<Signer>], trustees: [Signer, ...Array<Signer>]) {
     this.source = source
     this.hashEngine = hashEngine
     this.owners = owners
     this.trustees = trustees
+    this.padder = new Padder()
   }
 
   async process(): Promise<string> {
@@ -38,13 +41,16 @@ export class Crumbl {
     const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
     const obfuscated = obfuscator.apply(this.source)
 
-    // 2- Slice
+    // 2- Pad
+    const padded = this.padder.apply(obfuscated.toString(), obfuscated.length, true)
+
+    // 3- Slice
     const numberOfSlices = 1 + Math.min(this.trustees.length, MAX_SLICES)
     const deltaMax = getDeltaMax(obfuscated.length, numberOfSlices)
     const slicer = Slicer(numberOfSlices, deltaMax)
-    const slices = slicer.slice(obfuscated.toString().padStart(MIN_INPUT_SIZE, START_PADDING_CHARACTER))
+    const slices = slicer.slice(padded)
 
-    // 3- Encrypt
+    // 4- Encrypt
     const crumbs = new Array<Crumb>()
     for (let i = 0; i < this.owners.length; i++) {
       const crumb = await encrypt(slices[0], 0, this.owners[i])
@@ -63,11 +69,11 @@ export class Crumbl {
       }
     }
 
-    // 4- Hash the source string
+    // 5- Hash the source string
     const hasher = new Hasher(crumbs)
     const hashered = await hasher.apply(this.source)
 
-    // 5- Finalize the output string
+    // 6- Finalize the output string
     const stringifiedCrumbs = new Array<string>()
     for (let i = 0; i < crumbs.length; i++) {
       stringifiedCrumbs.push(crumbs[i].toString())

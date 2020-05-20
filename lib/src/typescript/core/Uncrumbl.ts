@@ -91,12 +91,9 @@ export class Uncrumbl {
       // 5a- Deobfuscate
       const obfuscated = collector.toObfuscated()
       const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
-      const deobfuscated = await obfuscator.unapply(obfuscated, this.verificationHash)
-      if (deobfuscated === '') {
-        return Promise.reject(new Error('unable to deobfuscate'))
-      }
+      const deobfuscated = obfuscator.unapply(obfuscated)
 
-      return collector.check(Buffer.from(deobfuscated)) // TODO Get rid of it if we keep the verificationHash check in deobfuscation
+      return collector.check(Buffer.from(deobfuscated))
         .then(isChecked => isChecked ? Promise.resolve(Buffer.from(deobfuscated)) : Promise.reject(new Error('source has not checked verification hash')))
     } else {
       // Trustee could only return his own uncrumbs

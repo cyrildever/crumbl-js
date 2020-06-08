@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -33,7 +33,7 @@
   "peerDependencies": {
     "buffer-xor": "~2.0.2",
     "ecies-geth": "^1.1.0",
-    "feistel-cipher": "^1.0.3",
+    "feistel-cipher": "^1.1.1",
     "seedrandom": "3.0.5"
   },
   "devDependencies": {
@@ -52,11 +52,14 @@
     "eslint": "^6.8.0",
     "eslint-plugin-no-loops": "~0.3.0",
     "eslint-plugin-react": "~7.18.3",
-    "feistel-cipher": "^1.0.3",
+    "feistel-cipher": "^1.1.1",
     "live-server": "^1.2.1",
     "mocha": "^6.2.2",
     "seedrandom": "3.0.5",
     "ts-node": "^8.6.2",
     "typescript": "~3.8.3"
+  },
+  "resolutions": {
+    "websocket-extensions": "0.1.4"
   }
 }

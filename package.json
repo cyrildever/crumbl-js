@@ -1,11 +1,11 @@
 {
   "name": "crumbl-js",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
   "scripts": {
-    "build": "eslint lib --ext .ts && tsc",
+    "compile": "eslint lib --ext .ts && tsc",
     "fix": "eslint lib --ext .ts --fix",
     "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=9001 --mount=/:test/src",
     "fix-test": "eslint test --ext .ts --fix",
@@ -24,7 +24,7 @@
     "third-party",
     "data masking"
   ],
-  "author": "Edgewhere <cdever@edgewhere.fr>",
+  "author": "Cyril Dever <cdever@edgewhere.fr>",
   "license": "BSD-2-Clause-Patent",
   "bugs": {
     "url": "https://github.com/edgewhere/crumbl-js/issues"
@@ -32,7 +32,7 @@
   "homepage": "https://github.com/edgewhere/crumbl-js#readme",
   "peerDependencies": {
     "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.1.0",
+    "ecies-geth": "^1.2.0",
     "feistel-cipher": "^1.1.1",
     "seedrandom": "3.0.5"
   },
@@ -48,7 +48,7 @@
     "buffer-xor": "~2.0.2",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "ecies-geth": "^1.1.0",
+    "ecies-geth": "^1.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-no-loops": "~0.3.0",
     "eslint-plugin-react": "~7.18.3",

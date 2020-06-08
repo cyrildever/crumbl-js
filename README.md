@@ -1,12 +1,12 @@
 # crumbl-js
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/edgewhere/crumbl-js)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/cyrildever/crumbl-js)
 ![npm](https://img.shields.io/npm/dw/crumbl-js)
-![GitHub last commit](https://img.shields.io/github/last-commit/edgewhere/crumbl-js)
-![GitHub issues](https://img.shields.io/github/issues/edgewhere/crumbl-js)
+![GitHub last commit](https://img.shields.io/github/last-commit/cyrildever/crumbl-js)
+![GitHub issues](https://img.shields.io/github/issues/cyrildever/crumbl-js)
 ![NPM](https://img.shields.io/npm/l/crumbl-js)
 
-crumbl-js is a JavaScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by [Edgewhere](https://www.edgewhere.fr).
+crumbl-js is a JavaScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Cyril Dever for [Edgewhere](https://www.edgewhere.fr).
 
 If you're interesting in using the library, please [contact us](mailto:contact@edgewhere.fr).
 
@@ -101,19 +101,19 @@ For maximum security and sustainability, we recommend the involvement of at leas
 ##### Dependencies #####
 
 This library relies on the following peer dependencies:
-* [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Edgewhere;
+* [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Cyril Dever for Edgewhere;
 * [`buffer-xor`](https://www.npmjs.com/package/buffer-xor);
 * [`seedrandom.js`](https://www.npmjs.com/package/seedrandom).
 
 
 #### Go Library ####
 
-You might want to check out the Go implementation for the Crumbl&trade;: [`crumbl-exe`](https://github.com/edgewhere/crumbl-exe), an executable and a Go client for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Edgewhere.
+You might want to check out the Go implementation for the Crumbl&trade;: [`crumbl-exe`](https://github.com/cyrildever/crumbl-exe), an executable and a Go client for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Cyril Dever for Edgewhere.
 
 
 #### Scala Library ####
 
-You might also want to check out the Scala implementation for the Crumbl&trade;: [`crumbl-jar`](https://github.com/edgewhere/crumbl-jar), a Scala client for the JVM and an executable JAR as well.
+You might also want to check out the Scala implementation for the Crumbl&trade;: [`crumbl-jar`](https://github.com/cyrildever/crumbl-jar), a Scala client for the JVM and an executable JAR as well.
 
 
 ### License ###
@@ -124,4 +124,4 @@ Please [contact us](mailto:contact@edgehere.fr) to get further information.
 
 
 <hr />
-&copy; 2019 - 2020 Edgewhere SAS. All rights reserved.
+&copy; 2019 - 2020 Cyril Dever. All rights reserved.

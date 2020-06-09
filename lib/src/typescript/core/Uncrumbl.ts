@@ -134,10 +134,28 @@ export const extractData = (crumbled: string): [string, Array<Crumb>] => {
     crumbs.push(crumb)
     crumbsStr = crumbsStr.substr(nextLen + 6)
   }
-    
+
   const hasheredSrc = parts[0].substr(0, DEFAULT_HASH_LENGTH)
   const hasher = new Hasher(crumbs)
   const vh = hasher.unapply(hasheredSrc)
 
   return [vh, crumbs]
+}
+
+/**
+ * Extract the hashered prefix from the passed crumbled string
+ * 
+ * @param {string} crumbl - The full crumbled string
+ * @returns the hashered prefix
+ */
+export const getHasheredSrc = (crumbled: string): string => {
+  const parts = crumbled.split('.', 2)
+  if (parts[1] !== VERSION) {
+    throw new Error('incompatible version: ' + parts[1])
+  }
+  const hasheredSrc = parts[0].substr(0, DEFAULT_HASH_LENGTH)
+  if (hasheredSrc.length !== DEFAULT_HASH_LENGTH) {
+    throw new Error('invalid hashered prefix' + hasheredSrc)
+  }
+  return hasheredSrc
 }

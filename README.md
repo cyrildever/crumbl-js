@@ -89,7 +89,7 @@ const workerExtractor = new BrowserWorker({
     mode: EXTRACTION,
     data: [crumbled, partialUncrumb1, partialUncrumb2],
     verificationHash: '580fb8a91f05833200dea7d33536aaec9d7ceb256a9858ee68e330e126ba409d',
-})
+});
 workerExtractor.extract(owner, true).then(result => {
   console.assert(result === source, 'Something wrong happened: are you sure you used the right items?');
 });
@@ -124,4 +124,4 @@ Please [contact us](mailto:contact@edgehere.fr) to get further information.
 
 
 <hr />
-&copy; 2019 - 2020 Cyril Dever. All rights reserved.
+&copy; 2019-2020 Cyril Dever. All rights reserved.

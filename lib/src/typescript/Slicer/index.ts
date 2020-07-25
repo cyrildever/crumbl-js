@@ -1,7 +1,6 @@
 import seedrandom from 'seedrandom'
 
 import { seedFor } from './Seed'
-
 import { Padder } from '../Padder'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version

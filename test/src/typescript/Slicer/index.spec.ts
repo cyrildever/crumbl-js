@@ -1,5 +1,6 @@
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
 import { Slicer, getDeltaMax } from '../../../../lib/src/typescript/Slicer'
+import { DEFAULT_KEY_STRING, DEFAULT_ROUNDS, Obfuscator } from '../../../../lib/src/typescript'
 
 declare function expect(val: any, message?: string): any
 
@@ -14,11 +15,11 @@ describe('Slicer', () => {
     })
     it('should fail if numberOfSlices === 0', () => {
       const numberOfSlices = 0
-      expect(() => Slicer(numberOfSlices, 0) ).to.throw('number of slices too small: 0')
+      expect(() => Slicer(numberOfSlices, 0)).to.throw('number of slices too small: 0')
     })
     it('should fail if numberOfSlices < 0', () => {
       const numberOfSlices = -3
-      expect(() => Slicer(numberOfSlices, 0) ).to.throw('number of slices too small: -3')
+      expect(() => Slicer(numberOfSlices, 0)).to.throw('number of slices too small: -3')
     })
     it('should be deterministic for delta max = 0', () => {
       const slicer = Slicer(4, 0)
@@ -39,7 +40,7 @@ describe('Slicer', () => {
       slices.every(slice => slice.length === size).should.be.true
     })
     it('should work under heavy load', () => {
-      expect(() => { 
+      expect(() => {
         for (let i = 0; i < 10000; i++) {
           const data = randomString()
           const slicer = Slicer(10, getDeltaMax(data.length, 10))
@@ -53,13 +54,24 @@ describe('Slicer', () => {
 
       slices[3].should.eqls('\u0002\u0002\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
     })
+    it('should have expected behaviour', () => {
+      const ref = 'cdever@edgewhere.fr'
+      const numberOfSlices = 4
+      const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
+      const found = obfuscator.apply(ref)
+      const slicer = Slicer(numberOfSlices, getDeltaMax(ref.length, numberOfSlices))
+      const slices = slicer.slice(found.toString())
+      const size = slices[0].length
+      slices.should.have.lengthOf(numberOfSlices)
+      slices.every(s => s.length == size).should.be.true
+    })
   })
   describe('unslice', () => {
     it('should be deterministic', () => {
       const slicer = Slicer(4, 0)
       const found1 = slicer.unslice(['\u0002\u000211111', '\u0002\u000222222', '\u0002\u000233333', '\u0002\u000244444'])
       const found2 = slicer.unslice(['\u0002\u000211111', '\u0002\u000222222', '\u0002\u000233333', '\u0002\u000244444'])
-      
+
       found1.should.eqls(found2) // '11111222223333344444'
     })
   })
@@ -119,7 +131,7 @@ describe('Slicer', () => {
       const data = randomString()
       const slicer = Slicer(10, getDeltaMax(data.length, 10))
       const found = slicer.unslice(slicer.slice(data))
-      
+
       found.should.eqls(data)
     })
   })

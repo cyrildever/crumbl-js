@@ -5,7 +5,7 @@ import { Padder } from '../Padder'
 
 export const MAX_SLICES = 4 // The owner of the data + 3 trustees is optimal as of this version
 export const MAX_DELTA = 5
-export type Delta = 0 | 1 | 2 | 3 | 4 | 5 
+export type Delta = 0 | 1 | 2 | 3 | 4 | 5
 export const MIN_INPUT_SIZE = 8 // Input below 8 characters must be left-padded
 export const MIN_SLICE_SIZE = 2
 
@@ -46,13 +46,14 @@ interface Slicer {
 export const Slicer = (numberOfSlices: number, deltaMax: Delta): Slicer => {
   const padder = new Padder()
 
-  if(numberOfSlices <= 0)
+  if (numberOfSlices <= 0) {
     throw new Error(`number of slices too small: ${numberOfSlices}`)
+  }
   return {
     slice: (data: string): [Slice, ...Array<Slice>] => {
       if (data.length === 0)
         throw new Error('unsupported empty data')
-      
+
       const fixedLength = Math.ceil(data.length / numberOfSlices) + deltaMax // >= 1 because of ceil
       const slices = split(numberOfSlices, deltaMax, data).map(split => padder.apply(split, fixedLength))
       return slices as [Slice, ...Array<Slice>]
@@ -66,6 +67,7 @@ const split = (numberOfSlices: number, deltaMax: number, data: string): Array<st
   buildSplitMask(numberOfSlices, deltaMax, data.length, seedFor(data))
     .map(mask => data.substring(mask.start, mask.end))
 
+// TODO Enhance algorithm
 const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: number, seed: string): Array<Mask> => {
   const averageSliceLength = Math.floor(dataLength / numberOfSlices)
   const dm = Math.min(deltaMax, averageSliceLength - 1)
@@ -77,7 +79,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
   let leftRound = numberOfSlices
   const rng = seedrandom(seed)
   while (dataLength > 0) {
-    const randomNum = rng() * dm / 2 + Math.floor(catchUp / leftRound)
+    const randomNum = rng() * dm / 2.0 + Math.floor(catchUp / leftRound)
     let addedNum = Math.min(dataLength, Math.ceil(randomNum) + averageSliceLength)
     // General rounding pb corrected at the end
     if (leftRound == 1 && length + addedNum < fullLength) {
@@ -88,7 +90,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
       end: length + addedNum
     }
     masks.push(m)
-    catchUp = fullLength - length - averageSliceLength * leftRound
+    catchUp = Math.max(fullLength - length - averageSliceLength * leftRound - addedNum, fullLength - length - averageSliceLength * leftRound)
     leftRound--
     length += addedNum
     dataLength -= addedNum
@@ -105,9 +107,9 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
  * @returns the maximum gap between the length of slices
  */
 export const getDeltaMax = (dataLength: number, numberOfSlices: number): Delta => {
-  if(numberOfSlices <= 0)
+  if (numberOfSlices <= 0)
     throw new Error(`number of slices too small: ${numberOfSlices}`)
-  
+
   const sliceSize = Math.floor(dataLength / numberOfSlices)
   if (dataLength <= MIN_INPUT_SIZE || sliceSize <= MIN_SLICE_SIZE) {
     return 0

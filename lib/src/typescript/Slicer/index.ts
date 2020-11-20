@@ -90,7 +90,7 @@ const buildSplitMask = (numberOfSlices: number, deltaMax: number, dataLength: nu
       end: length + addedNum
     }
     masks.push(m)
-    catchUp = Math.max(fullLength - length - averageSliceLength * leftRound - addedNum, fullLength - length - averageSliceLength * leftRound)
+    catchUp = fullLength - length - averageSliceLength * leftRound - (addedNum - averageSliceLength)
     leftRound--
     length += addedNum
     dataLength -= addedNum

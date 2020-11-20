@@ -52,7 +52,7 @@ describe('Slicer', () => {
       const slicer = Slicer(4, 2)
       const slices = slicer.slice('111111111222222222333333333444444444')
 
-      slices[3].should.eqls('\u0002\u0002\u0002\u0002\u0002\u00024444444') // Different from Go implementation due to random generator
+      slices[3].should.eqls('\u0002\u0002\u0002\u0002\u000244444444') // Different from Go implementation due to random generator
     })
     it('should have expected behaviour', () => {
       const ref = 'cdever@edgewhere.fr'

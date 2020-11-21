@@ -32,7 +32,7 @@
   "homepage": "https://github.com/cyrildever/crumbl-js#readme",
   "peerDependencies": {
     "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.2.4",
+    "ecies-geth": "^1.2.5",
     "feistel-cipher": "^1.1.5",
     "seedrandom": "3.0.5"
   },
@@ -48,7 +48,7 @@
     "buffer-xor": "~2.0.2",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "ecies-geth": "^1.2.4",
+    "ecies-geth": "^1.2.5",
     "eslint": "^6.8.0",
     "eslint-plugin-no-loops": "~0.3.0",
     "eslint-plugin-react": "~7.18.3",

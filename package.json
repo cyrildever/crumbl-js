@@ -33,7 +33,7 @@
   "peerDependencies": {
     "buffer-xor": "~2.0.2",
     "ecies-geth": "^1.4.0",
-    "feistel-cipher": "^1.2.0",
+    "feistel-cipher": "^1.2.1",
     "seedrandom": "3.0.5"
   },
   "devDependencies": {
@@ -52,7 +52,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-no-loops": "~0.3.0",
     "eslint-plugin-react": "~7.18.3",
-    "feistel-cipher": "^1.2.0",
+    "feistel-cipher": "^1.2.1",
     "live-server": "^1.2.1",
     "mocha": "^8.2.1",
     "seedrandom": "3.0.5",

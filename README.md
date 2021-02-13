@@ -10,7 +10,13 @@ crumbl-js is a JavaScript client developed in TypeScript for generating secure d
 
 If you're interesting in using the library, please [contact us](mailto:contact@edgewhere.fr).
 
-### Process ###
+
+### Formal description
+
+For details on the mathematical and protocol foundations, you might want to check out our [white paper](https://github.com/cyrildever/crumbl-js/blob/master/crumbl_whitepaper.pdf).
+
+
+### Process
 
 The whole process could be divided into two major steps:
 * create the _crumbl_ from a source data;
@@ -39,9 +45,9 @@ The first step involves at least two stakeholders, but preferably four for optim
 All these steps could be done building an integrated app utilizing the [TypeScript library](#typescript-library) server-side, or the [JavaScript library](#javascript-library) in the browser.
 
 
-### Usage ###
+### Usage
 
-#### JavaScript library ####
+#### JavaScript library
 
 ```console
 npm i crumbl-js
@@ -98,7 +104,7 @@ workerExtractor.extract(owner, true).then(result => {
 If the extracting stakeholder is not the data owner, the result would be a "partial uncrumb" to give to the data owner for processing the complete operation.
 For maximum security and sustainability, we recommend the involvement of at least three trusted signing third-parties in the process in addition to the data owner. Please [contact us](mailto:contact@edgewhere.fr) for a complete implementation.
 
-##### Dependencies #####
+##### Dependencies
 
 This library relies on the following peer dependencies:
 * [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Cyril Dever for Edgewhere;
@@ -106,17 +112,17 @@ This library relies on the following peer dependencies:
 * [`seedrandom.js`](https://www.npmjs.com/package/seedrandom).
 
 
-#### Go Library ####
+#### Go Library
 
 You might want to check out the Go implementation for the Crumbl&trade;: [`crumbl-exe`](https://github.com/cyrildever/crumbl-exe), an executable and a Go client for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Cyril Dever for Edgewhere.
 
 
-#### Scala Library ####
+#### Scala Library
 
 You might also want to check out the Scala implementation for the Crumbl&trade;: [`crumbl-jar`](https://github.com/cyrildever/crumbl-jar), a Scala client for the JVM and an executable JAR as well.
 
 
-### License ###
+### License
 
 The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [BSD-2-Clause-Patent License](LICENSE).
 All technologies are protected by patents owned by Edgewhere SAS.

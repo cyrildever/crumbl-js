@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",

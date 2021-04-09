@@ -1,6 +1,8 @@
+import { FPECipher } from 'feistel-cipher'
+
 import { seedFor } from '../../../../lib/src/typescript/Slicer/Seed'
 import { Slicer, getDeltaMax } from '../../../../lib/src/typescript/Slicer'
-import { DEFAULT_KEY_STRING, DEFAULT_ROUNDS, Obfuscator } from '../../../../lib/src/typescript'
+import { DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS, Obfuscator } from '../../../../lib/src/typescript'
 
 declare function expect(val: any, message?: string): any
 
@@ -57,7 +59,7 @@ describe('Slicer', () => {
     it('should have expected behaviour', () => {
       const ref = 'cdever@edgewhere.fr'
       const numberOfSlices = 4
-      const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
+      const obfuscator = new Obfuscator(new FPECipher(DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS))
       const found = obfuscator.apply(ref)
       const slicer = Slicer(numberOfSlices, getDeltaMax(ref.length, numberOfSlices))
       const slices = slicer.slice(found.toString())

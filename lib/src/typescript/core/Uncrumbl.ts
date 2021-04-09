@@ -1,12 +1,15 @@
+import { FPECipher } from 'feistel-cipher'
+
 import { Collector } from '../Decrypter/Collector'
 import { Crumb, toCrumb } from '../Encrypter/Crumb'
 import { decrypt } from '../Decrypter'
-import { DEFAULT_HASH_LENGTH, DEFAULT_HASH_ENGINE } from '../crypto'
-import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
+import { DEFAULT_HASH_LENGTH, DEFAULT_CRYPTO_HASH_ENGINE } from '../crypto'
+import { Obfuscator, DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Uncrumb } from '../Decrypter/Uncrumb'
 import { VERSION } from './Crumbl'
 import { Hasher } from '../Hasher'
+import { unpad } from '..'
 
 export class Uncrumbl {
   crumbled: string
@@ -15,12 +18,15 @@ export class Uncrumbl {
   signer: Signer
   isOwner: boolean
 
+  private cipher: FPECipher
+
   constructor(crumbled: string, slices: Array<Uncrumb>, verificationHash: string, signer: Signer, isOwner: boolean) {
     this.crumbled = crumbled
     this.slices = slices
     this.verificationHash = verificationHash
     this.signer = signer
     this.isOwner = isOwner
+    this.cipher = new FPECipher(DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
   }
 
   async process(): Promise<Buffer> {
@@ -86,15 +92,22 @@ export class Uncrumbl {
     }
     if (hasAllCrumbs) {
       // Owner may recover fully-deciphered data
-      const collector = new Collector(uncrumbs, indexSet.size, this.verificationHash, DEFAULT_HASH_ENGINE)
+      const collector = new Collector(uncrumbs, indexSet.size, this.verificationHash, DEFAULT_CRYPTO_HASH_ENGINE)
 
       // 5a- Deobfuscate
       const obfuscated = collector.toObfuscated()
-      const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
+      const obfuscator = new Obfuscator(this.cipher)
       const deobfuscated = obfuscator.unapply(obfuscated)
 
-      return collector.check(Buffer.from(deobfuscated))
-        .then(isChecked => isChecked ? Promise.resolve(Buffer.from(deobfuscated)) : Promise.reject(new Error('source has not checked verification hash')))
+      console.log(deobfuscated) // ####
+
+      // 5b- Unpad
+      const unpadded = unpad(deobfuscated)
+
+      console.log(unpadded) // ####
+
+      return collector.check(Buffer.from(unpadded))
+        .then(isChecked => isChecked ? Promise.resolve(Buffer.from(unpadded)) : Promise.reject(new Error('source has not checked verification hash')))
     } else {
       // Trustee could only return his own uncrumbs
 

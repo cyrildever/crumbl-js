@@ -1,4 +1,4 @@
-export const DEFAULT_HASH_ENGINE = 'sha-256'
+export const DEFAULT_CRYPTO_HASH_ENGINE = 'sha-256'
 export const DEFAULT_HASH_LENGTH = 64
 
 export const ECIES_ALGORITHM = 'ecies'
@@ -21,8 +21,8 @@ export const existsAlgorithm = (name: string): boolean => {
  * @param hashEngine the name of the hash engine (default: `sha-256`)
  * @returns the hexadecimal representation of the hashed data
  */
-export const hash = (data: string, hashEngine: string = DEFAULT_HASH_ENGINE): Promise<string> => new Promise((resolve, reject) => {
-  if (hashEngine !== DEFAULT_HASH_ENGINE)
+export const hash = (data: string, hashEngine: string = DEFAULT_CRYPTO_HASH_ENGINE): Promise<string> => new Promise((resolve, reject) => {
+  if (hashEngine !== DEFAULT_CRYPTO_HASH_ENGINE)
     reject(new Error('invalid hash engine'))
 
   resolve(crypto.subtle.digest(hashEngine, Buffer.from(data)).then(digested => Buffer.from(digested).toString('hex')))

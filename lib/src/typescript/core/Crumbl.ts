@@ -1,8 +1,10 @@
+import { FPECipher } from 'feistel-cipher'
+
 import { Crumb } from '../Encrypter/Crumb'
 import { Dispatcher } from '../Encrypter/Dispatcher'
 import { encrypt } from '../Encrypter'
 import { Hasher } from '../Hasher'
-import { Obfuscator, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
+import { Obfuscator, DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS } from '../Obfuscator'
 import { Signer } from '../models/Signer'
 import { Slicer, MAX_SLICES, getDeltaMax } from '../Slicer'
 import { Padder } from '../Padder'
@@ -16,6 +18,7 @@ export class Crumbl {
   trustees: [Signer, ...Array<Signer>]
 
   private padder: Padder
+  private cipher: FPECipher
 
   constructor(source: string, hashEngine: string, owners: [Signer, ...Array<Signer>], trustees: [Signer, ...Array<Signer>]) {
     this.source = source
@@ -23,6 +26,7 @@ export class Crumbl {
     this.owners = owners
     this.trustees = trustees
     this.padder = new Padder()
+    this.cipher = new FPECipher(DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
   }
 
   async process(): Promise<string> {
@@ -38,7 +42,7 @@ export class Crumbl {
 
   private async doCrumbl(): Promise<string> {
     // 1- Obfuscate
-    const obfuscator = new Obfuscator(DEFAULT_KEY_STRING, DEFAULT_ROUNDS)
+    const obfuscator = new Obfuscator(this.cipher)
     const obfuscated = obfuscator.apply(this.source)
 
     // 2- Pad

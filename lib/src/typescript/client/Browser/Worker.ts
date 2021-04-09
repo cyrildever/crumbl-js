@@ -1,6 +1,6 @@
 import { Crumbl, VERSION } from '../../core/Crumbl'
 import { CrumblMode, CREATION, EXTRACTION } from '..'
-import { hash, DEFAULT_HASH_ENGINE, DEFAULT_HASH_LENGTH } from '../../crypto'
+import { hash, DEFAULT_CRYPTO_HASH_ENGINE, DEFAULT_HASH_LENGTH } from '../../crypto'
 import { Signer } from '../../models/Signer'
 import { Uncrumb, PARTIAL_PREFIX, toUncrumb } from '../../Decrypter/Uncrumb'
 import { Uncrumbl } from '../../core/Uncrumbl'
@@ -45,7 +45,7 @@ export class BrowserWorker {
 
     // Build returned result
     let result = ''
-    const crumbl = new Crumbl(this.data[0], DEFAULT_HASH_ENGINE, owners, trustees)
+    const crumbl = new Crumbl(this.data[0], DEFAULT_CRYPTO_HASH_ENGINE, owners, trustees)
     if (this.htmlElement === undefined) {
       result = await crumbl.process()
     } else {

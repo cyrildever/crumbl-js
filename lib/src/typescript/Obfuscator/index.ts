@@ -1,13 +1,14 @@
-import * as feistel from 'feistel-cipher'
+import { FPECipher, readable2Buffer, SHA_256, toBase256Readable } from 'feistel-cipher'
 
+export const DEFAULT_HASH_ENGINE = SHA_256
 export const DEFAULT_KEY_STRING = '8ed9dcc1701c064f0fd7ae235f15143f989920e0ee9658bb7882c8d7d5f05692' // hash('crumbl by Edgewhere')
 export const DEFAULT_ROUNDS = 10
 
 export class Obfuscator {
-  readonly cipher: feistel.Cipher
+  readonly cipher: FPECipher
 
-  constructor(key: string, rounds: number) {
-    this.cipher = new feistel.Cipher(key, rounds)
+  constructor(cipher: FPECipher) {
+    this.cipher = cipher
   }
 
   /**
@@ -17,7 +18,7 @@ export class Obfuscator {
    * @returns the byte array of the obfuscated result
    */
   apply(data: string): Buffer {
-    return this.cipher.encrypt(data)
+    return readable2Buffer(this.cipher.encrypt(data))
   }
 
   /**
@@ -27,6 +28,6 @@ export class Obfuscator {
    * @returns the deobfuscated string
    */
   unapply(obfuscated: Buffer): string {
-    return this.cipher.decrypt(obfuscated)
+    return this.cipher.decrypt(toBase256Readable(obfuscated))
   }
 }

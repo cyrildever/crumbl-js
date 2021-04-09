@@ -1,5 +1,5 @@
 import { Crumbl } from '../../../../lib/src/typescript/core/Crumbl'
-import { DEFAULT_HASH_ENGINE, ECIES_ALGORITHM } from '../../../../lib/src/typescript/crypto'
+import { DEFAULT_CRYPTO_HASH_ENGINE, ECIES_ALGORITHM } from '../../../../lib/src/typescript/crypto'
 import { Signer } from '../../../../lib/src/typescript/models/Signer'
 
 const owner1Pubkey = Buffer.from('04e315a987bd79b9f49d3a1c8bd1ef5a401a242820d52a3f22505da81dfcd992cc5c6e2ae9bc0754856ca68652516551d46121daa37afc609036ab5754fe7a82a3', 'hex')
@@ -24,7 +24,7 @@ describe('Crumbl', () => {
         encryptionAlgorithm: ECIES_ALGORITHM,
         publicKey: trustee3Pubkey
       }
-      const c = new Crumbl(source, DEFAULT_HASH_ENGINE, [owner1], [trustee1, trustee3])
+      const c = new Crumbl(source, DEFAULT_CRYPTO_HASH_ENGINE, [owner1], [trustee1, trustee3])
       const crumbled = await c.process()
       console.log(crumbled)
       crumbled.should.not.be.empty

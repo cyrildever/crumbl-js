@@ -1,7 +1,7 @@
 import xor from 'buffer-xor'
 
 import { Crumb } from '../Encrypter/Crumb'
-import { hash, DEFAULT_HASH_ENGINE } from '../crypto'
+import { hash, DEFAULT_CRYPTO_HASH_ENGINE } from '../crypto'
 import { euclideanDivision } from '..'
 
 export const NUMBER_OF_CHARACTERS = 32
@@ -25,7 +25,7 @@ export class Hasher {
    * @returns the hashered string
    */
   async apply(source: string): Promise<string> {
-    const stringifiedHash = await hash(source, DEFAULT_HASH_ENGINE)
+    const stringifiedHash = await hash(source, DEFAULT_CRYPTO_HASH_ENGINE)
     const length = stringifiedHash.length
     if (length < NUMBER_OF_CHARACTERS) {
       const msg = 'wrong hash algorithm'

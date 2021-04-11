@@ -24,7 +24,7 @@ export class Collector {
      * 
      * @param data 
      */
-  check(data: Buffer): Promise<boolean> {
+  async check(data: Buffer): Promise<boolean> {
     return hash(data.toString(), this.hashEngine)
       .then(hashedData => hashedData === this.verificationHash)
   }
@@ -41,6 +41,7 @@ export class Collector {
       }
       o += this.padder.unapply(uncrumb.toSlice())
     }
+    o = this.padder.unapply(o)
     return Buffer.from(o)
   }
 }

@@ -99,12 +99,8 @@ export class Uncrumbl {
       const obfuscator = new Obfuscator(this.cipher)
       const deobfuscated = obfuscator.unapply(obfuscated)
 
-      console.log(deobfuscated) // ####
-
       // 5b- Unpad
       const unpadded = unpad(deobfuscated)
-
-      console.log(unpadded) // ####
 
       return collector.check(Buffer.from(unpadded))
         .then(isChecked => isChecked ? Promise.resolve(Buffer.from(unpadded)) : Promise.reject(new Error('source has not checked verification hash')))

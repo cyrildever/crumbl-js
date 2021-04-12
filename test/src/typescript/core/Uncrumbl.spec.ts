@@ -82,9 +82,9 @@ describe('Uncrumbl', () => {
         encryptionAlgorithm: ECIES_ALGORITHM,
         privateKey: Buffer.from('325ab5aace32d823f990a2057119bedddf0d7a8ddc8b19e61d89e73d4531c587', 'hex')
       }
-      const uncrumb1 = toUncrumb('01BAQEBAYkUgI=.1')
-      const uncrumb2 = toUncrumb('02AgICAk5WGh0=.1')
-      const uncrumb3 = toUncrumb('03BAQEBARRVgI=.1')
+      const uncrumb1 = toUncrumb('01BAQEBAYkUgI=')
+      const uncrumb2 = toUncrumb('02AgICAk5WGh0=')
+      const uncrumb3 = toUncrumb('03BAQEBARRVgI=')
       let uncrumbler = new Uncrumbl(crumbled, [uncrumb1, uncrumb2, uncrumb3], verificationHash, owner, true)
       const uncrumbBuffer = await uncrumbler.process()
       uncrumbBuffer.should.eqls(expectedBytes)
@@ -96,9 +96,9 @@ describe('Uncrumbl', () => {
         encryptionAlgorithm: ECIES_ALGORITHM,
         privateKey: Buffer.from('7f2a59ae79dbdb984a8b05e1cc4845fa161ba9b7976de713b373540100232ab0', 'hex')
       }
-      const uncrumb4 = toUncrumb('01AgICUVU=.1')
-      const uncrumb5 = toUncrumb('02AgJXUFk=.1')
-      const uncrumb6 = toUncrumb('03AgJRBVI=.1')
+      const uncrumb4 = toUncrumb('01AgICUVU=')
+      const uncrumb5 = toUncrumb('02AgJXUFk=')
+      const uncrumb6 = toUncrumb('03AgJRBVI=')
       uncrumbler = new Uncrumbl(crumbled, [uncrumb4, uncrumb5, uncrumb6], verificationHash, owner, true)
       const uncrumb = await uncrumbler.process()
       uncrumb.toString().should.equal(expected)

@@ -6,6 +6,8 @@ import { DEFAULT_HASH_ENGINE, DEFAULT_KEY_STRING, DEFAULT_ROUNDS, Obfuscator } f
 
 declare function expect(val: any, message?: string): any
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+
 describe('Slicer', () => {
   // Equivalent to 'crumbl-exe/slicer/slicer_test.go' tests
   describe('slice', () => {
@@ -140,3 +142,5 @@ describe('Slicer', () => {
 })
 
 const randomString = (): string => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+/* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */

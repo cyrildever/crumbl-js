@@ -44,7 +44,8 @@ describe('crypto/ecies', () => {
       try {
         await decrypt(encrypted, privkey2)
         return fail()
-      } catch (e){
+      } catch (e: any) {
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         return expect(e.message).to.eqls('Incorrect MAC')
       }
     })

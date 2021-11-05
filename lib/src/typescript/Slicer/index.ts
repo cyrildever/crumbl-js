@@ -17,7 +17,7 @@ interface Mask {
 }
 
 //TODO a nicer syntax wouls be slice(data).into(numberOfSlices) and unslice(slices) or just slice(data, numberOfSlices)
-interface Slicer {
+export interface Slicer {
   /**
    * Slice the passed data into an array of multiple parts.
    * The number of part is base on the properties `numberOfSlices` and `dataLength` this object was

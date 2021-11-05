@@ -44,6 +44,6 @@ describe('euclideanDivision', () => {
     remainder.should.equal(1)
   })
   it('should throw an error when dividing by zero', () => {
-    expect(() => euclideanDivision(23, 0)).to.throw('division by zero')
+    expect(() => euclideanDivision(23, 0)).to.throw('division by zero') // eslint-disable-line  @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
   })
 })

@@ -8,7 +8,7 @@
 
 crumbl-js is a JavaScript client developed in TypeScript for generating secure data storage with trusted signing third-parties using the Crumbl&trade; technology patented by Cyril Dever for [Edgewhere](https://www.edgewhere.fr).
 
-If you're interesting in using the library, please [contact us](mailto:contact@edgewhere.fr).
+If you're interesting in using the library, please [contact Edgewhere](mailto:contact@edgewhere.fr).
 
 
 ### Formal description
@@ -106,7 +106,7 @@ For maximum security and sustainability, we recommend the involvement of at leas
 
 ##### Dependencies
 
-This library relies on the following peer dependencies:
+This library relies on the following dependencies:
 * [`ecies-geth`](https://www.npmjs.com/package/ecies-geth) and [`feistel-cipher`](https://www.npmjs.com/package/feistel-cipher) provided by Cyril Dever for Edgewhere;
 * [`buffer-xor`](https://www.npmjs.com/package/buffer-xor);
 * [`seedrandom.js`](https://www.npmjs.com/package/seedrandom).
@@ -131,7 +131,7 @@ You might also want to check out the Scala implementation for the Crumbl&trade;:
 
 The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [BSD-2-Clause-Patent License](LICENSE).
 All technologies are protected by patents owned by Edgewhere SAS.
-Please [contact us](mailto:contact@edgehere.fr) to get further information.
+Please [contact Edgewhere](mailto:contact@edgewhere.fr) to get further information.
 
 
 <hr />

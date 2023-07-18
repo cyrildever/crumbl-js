@@ -130,7 +130,7 @@ You might also want to check out the Scala implementation for the Crumbl&trade;:
 ### License
 
 The use of the Crumbl&trade; library is subject to fees for commercial purposes and to the respect of the [BSD-2-Clause-Patent License](LICENSE).
-All technologies are protected by patents owned by Edgewhere SAS.
+All technologies are protected by patents owned by Edgewhere SAS. \
 Please [contact Edgewhere](mailto:contact@edgewhere.fr) to get further information.
 
 

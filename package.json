@@ -1,15 +1,15 @@
 {
   "name": "crumbl-js",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
   "scripts": {
     "compile": "eslint lib --ext .ts && tsc",
     "fix": "eslint lib --ext .ts --fix",
-    "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=9001 --mount=/:test/src",
+    "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=10001 --mount=/:test/src",
     "fix-test": "eslint test --ext .ts --fix",
-    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/index.spec.js -o dist/test/index.js && live-server --port=9001 --mount=/:test/src"
+    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/index.spec.js -o dist/test/index.js && live-server --port=10001 --mount=/:test/src"
   },
   "repository": {
     "type": "git",
@@ -32,8 +32,8 @@
   "homepage": "https://github.com/cyrildever/crumbl-js#readme",
   "dependencies": {
     "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.7.0",
-    "feistel-cipher": "^1.5.10",
+    "ecies-geth": "^1.7.1",
+    "feistel-cipher": "^1.5.12",
     "seedrandom": "3.0.5"
   },
   "peerDependencies": {
@@ -42,23 +42,23 @@
     "sha3": "^2.1.4"
   },
   "devDependencies": {
-    "@types/buffer-xor": "^2.0.1",
-    "@types/chai": "^4.3.9",
-    "@types/mocha": "^10.0.3",
-    "@types/node": "^20.8.10",
-    "@types/seedrandom": "^3.0.7",
-    "@typescript-eslint/eslint-plugin": "^6.9.1",
-    "@typescript-eslint/parser": "^6.9.1",
+    "@types/buffer-xor": "^2.0.2",
+    "@types/chai": "^4.3.14",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.30",
+    "@types/seedrandom": "^3.0.8",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "blakejs": "^1.2.1",
     "browserify": "^17.0.0",
-    "chai": "^4.3.10",
+    "chai": "^4.4.0",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^8.53.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-no-loops": "~0.3.0",
     "keccak": "^3.0.4",
-    "mocha": "^10.2.0",
+    "mocha": "^10.4.0",
     "sha3": "^2.1.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
   }
 }

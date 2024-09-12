@@ -32,7 +32,7 @@ export class Hasher {
       throw new Error(msg)
     }
     const lastBytes = Buffer.from(stringifiedHash.substring(length - NUMBER_OF_CHARACTERS), 'hex')
-    const sortedOwnerCrumbs = this.crumbs.filter(crumb => crumb.index === 0).map(_ => _.encrypted.toString()).sort() // eslint-disable-line @typescript-eslint/require-array-sort-compare
+    const sortedOwnerCrumbs = this.crumbs.filter(crumb => crumb.index === 0).map(_ => _.encrypted.toString()).sort()  
     if (sortedOwnerCrumbs.length < 1) {
       throw new Error('owner\'s crumbs not present')
     }
@@ -55,7 +55,7 @@ export class Hasher {
     }
     const xoredHex = hashered.substring(hashered.length - NUMBER_OF_CHARACTERS)
     const xored = Buffer.from(xoredHex, 'hex')
-    const sortedOwnerCrumbs = this.crumbs.filter(crumb => crumb.index === 0).map(_ => _.encrypted.toString()).sort() // eslint-disable-line @typescript-eslint/require-array-sort-compare
+    const sortedOwnerCrumbs = this.crumbs.filter(crumb => crumb.index === 0).map(_ => _.encrypted.toString()).sort()  
     if (sortedOwnerCrumbs.length < 1) {
       throw new Error('owner\'s crumbs not present')
     }

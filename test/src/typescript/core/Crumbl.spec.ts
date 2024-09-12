@@ -27,7 +27,7 @@ describe('Crumbl', () => {
       const c = new Crumbl(source, DEFAULT_CRYPTO_HASH_ENGINE, [owner1], [trustee1, trustee3])
       const crumbled = await c.process()
       console.log(crumbled)
-      crumbled.should.not.be.empty
+      return crumbled.should.not.be.empty
     })
   })
 })

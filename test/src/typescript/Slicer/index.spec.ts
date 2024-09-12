@@ -41,7 +41,7 @@ describe('Slicer', () => {
       const slicer = Slicer(4, 2)
       const slices = slicer.slice('111111111222222222333333333444444444')
       const size = slices[0].length
-      slices.every(slice => slice.length === size).should.be.true
+      return slices.every(slice => slice.length === size).should.be.true
     })
     it('should work under heavy load', () => {
       expect(() => {
@@ -67,7 +67,7 @@ describe('Slicer', () => {
       const slices = slicer.slice(found.toString())
       const size = slices[0].length
       slices.should.have.lengthOf(numberOfSlices)
-      slices.every(s => s.length == size).should.be.true
+      return slices.every(s => s.length == size).should.be.true
     })
   })
   describe('unslice', () => {

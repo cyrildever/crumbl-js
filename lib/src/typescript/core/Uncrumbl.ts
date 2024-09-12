@@ -70,7 +70,7 @@ export class Uncrumbl {
         if (!uncrumbs.has(uncrumb.index)) {
           uncrumbs.set(idx, uncrumb)
         }
-      } catch (e) {
+      } catch (_) { // eslint-disable-line @typescript-eslint/no-unused-vars
         // NO-OP
       }
     }

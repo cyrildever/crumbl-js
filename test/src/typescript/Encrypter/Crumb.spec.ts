@@ -23,7 +23,7 @@ describe('Crumb', () => {
       const found = toCrumb(str)
       found.should.eqls(expected)
 
-      found.equals(expected).should.be.true
+      return found.equals(expected).should.be.true
     })
   })
 })

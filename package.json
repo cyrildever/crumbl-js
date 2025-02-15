@@ -1,6 +1,6 @@
 {
   "name": "crumbl-js",
-  "version": "6.4.3",
+  "version": "6.4.4",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
@@ -32,8 +32,8 @@
   "homepage": "https://github.com/cyrildever/crumbl-js#readme",
   "dependencies": {
     "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.7.3",
-    "feistel-cipher": "^1.5.13",
+    "ecies-geth": "^1.7.4",
+    "feistel-cipher": "^1.5.14",
     "seedrandom": "3.0.5"
   },
   "peerDependencies": {
@@ -42,26 +42,26 @@
     "sha3": "^2.1.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.13.0",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.20.0",
     "@types/buffer-xor": "^2.0.2",
     "@types/chai": "^4.3.19",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.7.9",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.4",
     "@types/seedrandom": "^3.0.8",
-    "@typescript-eslint/eslint-plugin": "^8.11.0",
-    "@typescript-eslint/parser": "^8.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
     "blakejs": "^1.2.1",
     "browserify": "^17.0.1",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
-    "eslint": "^9.13.0",
+    "eslint": "^9.20.1",
     "eslint-plugin-no-loops": "~0.4.0",
-    "globals": "^15.11.0",
+    "globals": "^15.15.0",
     "keccak": "^3.0.4",
     "mocha": "^10.7.3",
     "sha3": "^2.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.3"
   }
 }

@@ -1,4 +1,6 @@
 tsconfig.json
+esbuild.browser.mjs
+eslint.config.mjs
 node_modules
 example
 lib

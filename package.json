@@ -1,15 +1,17 @@
 {
   "name": "crumbl-js",
-  "version": "6.4.5",
+  "version": "6.6.0",
   "description": "Secure data storage with trusted third-parties to use in Javascript environment",
   "main": "dist/lib/src/typescript/index.js",
   "types": "dist/lib/src/typescript/index.d.ts",
   "scripts": {
     "compile": "eslint lib/**/*.ts && tsc",
     "fix": "eslint lib/**/*.ts --fix",
-    "test": "tsc && browserify $(find ./dist/test/src/typescript -type f -name \"*.js\") -o dist/test/index.js && live-server --port=10001 --mount=/:test/src",
-    "fix-test": "eslint test/**/*.ts --fix",
-    "single-test-on-windows-to-adapt": "tsc && browserify ./dist/test/src/typescript/index.spec.js -o dist/test/index.js && live-server --port=10001 --mount=/:test/src"
+    "test": "tsc && node esbuild.browser.mjs && live-server --port=10001 --mount=/:test/src",
+    "test-browser": "tsc && node esbuild.browser.mjs && live-server --port=10001 --mount=/:test/src",
+    "test-node": "tsc && esbuild test/src/typescript/node.spec.ts --bundle --outfile=dist/test/node.spec.cjs --platform=node --format=cjs --external:keccak --external:secp256k1 --external:mocha && mocha dist/test/node.spec.cjs",
+    "test:ci": "npm run test-node && npm audit --omit=dev --audit-level=moderate",
+    "fix-test": "eslint test/**/*.ts --fix"
   },
   "repository": {
     "type": "git",
@@ -32,8 +34,8 @@
   "homepage": "https://github.com/cyrildever/crumbl-js#readme",
   "dependencies": {
     "buffer-xor": "~2.0.2",
-    "ecies-geth": "^1.7.6",
-    "feistel-cipher": "^1.5.15",
+    "ecies-geth": "^1.8.0",
+    "feistel-cipher": "^1.6.0",
     "seedrandom": "3.0.5"
   },
   "peerDependencies": {
@@ -42,26 +44,27 @@
     "sha3": "^2.1.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
     "@types/buffer-xor": "^2.0.2",
-    "@types/chai": "^4.3.20",
+    "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "25.0.3",
+    "@types/node": "^25.9.3",
     "@types/seedrandom": "^3.0.8",
-    "@typescript-eslint/eslint-plugin": "^8.52.0",
-    "@typescript-eslint/parser": "^8.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.61.0",
+    "@typescript-eslint/parser": "^8.61.0",
     "blakejs": "^1.2.1",
-    "browserify": "^17.0.1",
-    "chai": "^4.5.0",
-    "chai-as-promised": "^7.1.2",
+    "chai": "^6.2.2",
+    "crypto-browserify": "^3.12.1",
+    "esbuild": "^0.28.0",
     "eslint": "^9.39.2",
     "eslint-plugin-no-loops": "~0.4.0",
     "globals": "^17.0.0",
     "keccak": "^3.0.4",
-    "mocha": "^10.7.3",
+    "mocha": "^11.7.6",
     "sha3": "^2.1.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
